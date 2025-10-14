@@ -16,8 +16,12 @@ The majority of respondents prefer seeing key metrics with the option to explore
 Design dashboards to show key metrics upfront with optional drill-down details. Prioritize number-based spending summaries while offering relatable comparisons as secondary context.
 
 Observation 3:  
-Observation 4:  
+Observation 4:
+- Users find billing reminders and progress tracking the most helpful which signals that these messages will be what motivates users to continue using the app.
+- A moderate amount of users prefered displaying a spending summary to streaks, which implicates that streaks may not be an ideal feature to implement.
+- Our team should focus on displaying billing, tracking, and a quick summary messages for users. 
 Observation 5:  
+
 
 
 
