@@ -16,8 +16,17 @@ The majority of respondents prefer seeing key metrics with the option to explore
 Design dashboards to show key metrics upfront with optional drill-down details. Prioritize number-based spending summaries while offering relatable comparisons as secondary context.
 
 Observation 3:  
+
+Most users would prefer to interact with their saving goals by setting them and being able to forget about it and let automatic transfers take over, and to track their spending they would like it to be mopstly automatic with some manual categorization options.  
+
+- **42.0%** prefer to track spending Mostly automatic, occasional manual categorization  
+- **56.8%**How would you want to interact with your savings goals
+
+Ensure the tracking past setting goals is mostly automatic  
+
 Observation 4:  
 Observation 5:  
+
 
 
 
