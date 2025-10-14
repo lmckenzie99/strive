@@ -2,6 +2,7 @@ Observation 1:
 - A combination of routine and strong notifications were the strongest reasons for opening the app consistently.
 - The data supporting this was that 49.4% of responders selected push notifications as being helpful as one of three of their choices. The other data point supporting this is that 54.3% of people selected routine as one of three of their choices.
 - Our team action is to concentrate focus on notifications during the U/I development. 
+
 Observation 2:
  
 The majority of respondents prefer seeing key metrics with the option to explore details further. When it comes to displaying spending information, users tend to favor clear, number-focused summaries over more creative comparisons.
@@ -17,6 +18,7 @@ Design dashboards to show key metrics upfront with optional drill-down details. 
 Observation 3:  
 Observation 4:  
 Observation 5:  
+
 
 
 
