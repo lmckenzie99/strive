@@ -32,6 +32,11 @@ Observation 4:
   
 Observation 5:  
 
+Most users would prefer to have spending patterns communicated to them either by suggestion or direct message.
+- **30.9%** want a suggestion, "Try making coffee at home2x/week to save $40/month"
+- **25.9%** want a direct message, "You buy coffee out 5x/week".  
+Overall, out of five options a majority fell above 20% preference.  
+An action learned from this is to give users an option in settings, but have the default option set to suggestion.
 
 
 
