@@ -25,7 +25,13 @@ Most users would prefer to interact with their saving goals by setting them and 
 Ensure the tracking past setting goals is mostly automatic  
 
 Observation 4:  
+
+- Users find billing reminders and progress tracking the most helpful which signals that these messages will be pivotal for maintaining users.
+- More users indicated that a daily spending summary would be a more helpful message than having a daily streak reminder.
+- Insights show that messages regarding billing, progress tracking and daily spending are the ideal messages users want to see.
+  
 Observation 5:  
+
 
 
 
