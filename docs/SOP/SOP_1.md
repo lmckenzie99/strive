@@ -159,7 +159,7 @@ By adding your name below and committing this file to GitHub, you confirm that y
 
 **Acknowledged by:**
 - [Liam McKenzie] - Scrum Master / Backend Developer - [10/20/2025]
-- 
+- [Andrew Fleet] - U/I Design - [10/20/2025] 
 - 
 - 
 - 
