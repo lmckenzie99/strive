@@ -162,7 +162,7 @@ By adding your name below and committing this file to GitHub, you confirm that y
 - [Andrew Fleet] - U/I Design - [10/20/2025] 
 - [Rohm Ramsey] - U/I Design - [10/21/2025]
 - [Dylan Watkins] - Documentation - [10/21/2025]
-- 
+- [Christian Currie] - Documentation/Testing/Meeting Logging - [10/21/25]
 
 ---
 
