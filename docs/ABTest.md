@@ -241,3 +241,199 @@ Condition: User not in "existing_users" segment
 
 ---
 
+Here’s your A/B test formatted in **clean, GitHub-ready Markdown** (fully structured with headers, bullet points, and code blocks for mockups):
+
+---
+# A/B Test Plan — Pie Chart vs Bar Graph for Detail Analysis
+
+## A/B Test Name
+**ChartType_DetailAnalysis_Pie_vs_Bar**
+
+---
+
+## User Story Number
+**US4 — Data Visualization / Detail Analysis**
+
+*Goal:* Improve how users understand and act on detailed breakdowns in the analytics/detail screen.
+
+---
+
+## HEART Metrics
+| Metric | Description |
+|:-------|:-------------|
+| **Happiness** | In-app rating after viewing the chart (1–5) |
+| **Engagement** | Time on chart and number of interactions (hover, filter, legend clicks) |
+| **Adoption** | % of users who open the detailed-analysis view |
+| **Retention** | % of users who return to the analytics/detail page within 7 days |
+| **Task Success (Primary)** | % of users who successfully complete the target task (export or drill into data) |
+
+**Primary Metric:** Task Success  
+**Secondary Metrics:** Engagement, Happiness
+
+---
+
+## Hypothesis
+If we present the detailed breakdown as a **bar graph** instead of a **pie chart**, then users will more accurately identify the largest categories and complete the target task, increasing task success by **≥5 percentage points** (e.g., from 20% to 25%).
+
+*Rationale:* Bar graphs make comparisons easier and reduce cognitive load for detail-oriented tasks.
+
+---
+
+## Problem Statement & Impact
+**Problem:** Users struggle to extract accurate comparative information from the current pie chart in the Detail Analysis screen. Drop-off occurs at the “identify & take action” step.
+
+**Impact:** Prevents downstream workflows (reporting/exporting). A better visualization could directly improve actionable conversions.
+
+**Narrowed Bottleneck:** Low conversion from viewing details → taking action.  
+**Variable Tested:** Chart type (Pie vs Bar).
+
+---
+
+## Experiment Design (Firebase A/B Setup)
+
+### Platform Components
+- **Firebase Remote Config:** Deliver chart variant
+- **Firebase A/B Testing:** Manage experiment
+- **Firebase Analytics:** Log events & measure outcomes
+
+### Audience
+- All authenticated users reaching the Detail Analysis screen  
+- Exclude internal QA/test accounts  
+- **Split:** 50% Pie (Control) / 50% Bar (Variant)
+
+### Sample Size & Duration
+- Baseline: 20% task success  
+- MDE: +5 percentage points  
+- α = 0.05, Power = 0.80 → ~1,095 users per variant (~2,200 total)
+
+---
+
+### Tracking (Firebase Analytics Events)
+| Event | Description | Params |
+|:------|:-------------|:-------|
+| `detail_page_view` | When detail screen is viewed | `chart_variant`, `user_id_type` |
+| `chart_hover` | Hover on a chart element | `element`, `value`, `category` |
+| `chart_click` | Click on a chart element | `element`, `category` |
+| `legend_toggle` | Show/hide legend item | `category`, `visible` |
+| `detail_action_completed` | Task completion (goal) | `action_type`, `chart_variant` |
+| `detail_chart_rating` | 1–5 satisfaction score | `rating`, `chart_variant` |
+
+**User Properties**
+- `chart_variant_assigned`
+- `is_internal_user` (for filtering)
+
+**Goals**
+- **Primary:** `detail_action_completed`
+- **Secondary:** `time_on_chart`, `detail_chart_rating`, engagement counts
+
+---
+
+## Variations
+
+### **Control (A)** — Pie Chart
+- Current UI
+- Legend on the right
+- Tooltip on hover
+- Slice click → drill-down
+
+### **Variant (B)** — Bar Graph
+- Sorted vertically by value
+- X-axis: categories, Y-axis: values
+- Labels displayed at end of bars
+- Click → drill-down
+- Collapsible legend above chart
+
+---
+
+### Mockups
+
+**Control (Pie)**
+```
+
++-------------------------------------+
+| Detail Analysis — Pie (Control)     |
+|                                     |
+|        [ Pie Chart ]                |
+|      (slices with tooltips)         |
+|                                     |
+| Legend: [Cat A] [Cat B] [Cat C]     |
+|                                     |
+| [Export] [Drill]  Time on chart: 12s|
++-------------------------------------+
+
+```
+
+**Variant (Bar)**
+```
+
++-------------------------------------+
+| Detail Analysis — Bar (Variant)     |
+|                                     |
+| Category      | Value               |
+| ----------------------------------- |
+| Cat A  ███████████████  42%         |
+| Cat B  █████████      20%           |
+| Cat C  ████           8%            |
+| ...                                 |
+|                                     |
+| [Sort: Desc] [Toggle Legend]        |
+| [Export] [Drill]  Time on chart: 20s|
++-------------------------------------+
+
+```
+
+---
+
+## Implementation Checklist
+- [ ] Add Remote Config key `detail_chart_type` (`"pie"` / `"bar"`)
+- [ ] Render chart based on Remote Config
+- [ ] Include `chart_variant` in all Analytics events
+- [ ] Implement one-question satisfaction survey
+- [ ] Log errors/fallbacks for chart rendering
+
+---
+
+## Measurement Plan & Analysis
+**Primary:**  
+Two-proportion z-test comparing `detail_action_completed` across variants.
+
+**Secondary:**  
+Compare `time_on_chart`, `detail_chart_rating`, `chart_click` counts.
+
+**Success Criteria:**
+- Significant (p < 0.05) uplift ≥ 5pp in task success  
+- No negative impact on satisfaction or retention
+
+---
+
+## Rollout Plan
+- **Winner:** Roll out to 100% via Remote Config  
+- **Monitor:** Metrics for 2 additional weeks  
+- **Negative/Neutral:** Revert to control
+
+---
+
+## Risks & Mitigations
+| Risk | Mitigation |
+|:-----|:------------|
+| Sorting/labels inconsistency | Fix sorting & labeling; only chart type varies |
+| Mobile layout issues | Responsive design testing |
+| Color/legend changes confound | Keep identical color palette |
+| Survey bias | Keep identical wording & trigger timing |
+
+---
+
+## Deliverables
+- Remote Config key and default
+- Analytics event schema
+- Firebase A/B config (50/50)
+- Design mockups (Pie vs Bar)
+- Power calculation summary (~1,095 users per variant)
+
+---
+
+## Quick Summary
+Test whether switching the Detail Analysis visualization from a pie chart to a bar chart increases actionable conversions by making category comparisons easier.  
+**Run a 50/50 Firebase A/B test**, track `detail_action_completed` as the primary metric, and target **~2,200 total users** to detect a **+5pp uplift**.
+
+---
