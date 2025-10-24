@@ -237,11 +237,11 @@ Condition: User not in "existing_users" segment
 **Decision Framework**:
 - **Ship Variant**: If primary success criteria met + no critical regressions
 - **Iterate**: If promising but not statistically significant → extend test or refine variant
-- **Keep Control**: If no improvement or negative impact detected
+- **Keep Control**: If no improvement or negative impact detected  
+## Quick Summary
 
----
+**Test Overview**: We're testing whether changing the transition direction between Sign Up and Log In screens from horizontal (left/right swipe) to vertical (up/down swipe) will reduce user confusion and improve authentication flow completion rates.
 
-Here’s your A/B test formatted in **clean, GitHub-ready Markdown** (fully structured with headers, bullet points, and code blocks for mockups):
 
 ---
 # A/B Test Plan — Pie Chart vs Bar Graph for Detail Analysis
