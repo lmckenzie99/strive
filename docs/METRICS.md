@@ -1,9 +1,13 @@
 HEART Framework Metrics
 - https://docs.google.com/presentation/d/1DQiLZtovgMRINwEHNepGJAObAbs4A98cLrvkJ5Q9jdk/edit?usp=sharing
 
-Happiness -  • Net Promoter Score (NPS)
-             • % of positive vs negative reviews
-             • Customer Satisfaction Score (CSAT)
+### Happiness Metrics
+
+* **Net Promoter Score (NPS)** - Implement an in-app survey prompt (Firebase Cloud Functions trigger after 7 days of usage) asking "How likely are you to recommend Strive to a friend?" (0-10 scale). Store responses in Firestore collection `nps_surveys` with fields: `userId`, `score`, `timestamp`, `feedback_text`.  
+
+* **% of positive vs negative reviews** - Use App Store Connect API and Google Play Console API to fetch reviews programmatically. Store aggregated data in Firestore `app_reviews` collection, or manually track weekly in Firebase Analytics custom events.  
+
+* **Customer Satisfaction Score (CSAT)** - Add post-interaction surveys (e.g., after completing first savings goal) with "How satisfied are you with this experience?" (1-5 scale). Store in Firestore `csat_responses` collection with `userId`, `rating`, `feature`, `timestamp`.  
   
 ### Adoption Metrics
 
