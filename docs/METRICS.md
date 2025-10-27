@@ -8,6 +8,32 @@ HEART Framework Metrics
 * **% of positive vs negative reviews** - Use App Store Connect API and Google Play Console API to fetch reviews programmatically. Store aggregated data in Firestore `app_reviews` collection, or manually track weekly in Firebase Analytics custom events.  
 
 * **Customer Satisfaction Score (CSAT)** - Add post-interaction surveys (e.g., after completing first savings goal) with "How satisfied are you with this experience?" (1-5 scale). Store in Firestore `csat_responses` collection with `userId`, `rating`, `feature`, `timestamp`.  
+
+### Engagement Metrics
+
+* **Average Daily Habit Tracking Rate**  
+  Measures the percentage of habits tracked by users each day compared to the total habits created.  
+  Use Firebase Analytics to log a `habit_tracked` event and store total habits per user in Firestore.  
+  **Formula:** `(habits_tracked_today / total_habits_created) * 100`  
+  This shows how consistently users engage with their habits after onboarding.
+
+* **DAU / MAU Ratio**  
+  Tracks product stickiness by comparing the number of daily active users (DAU) to monthly active users (MAU).  
+  Use Firebase Analytics’ active user metrics or custom events like `app_open` or `dashboard_view`.  
+  **Formula:** `(DAU / MAU) * 100`  
+  A higher ratio indicates users return frequently and are forming usage habits.
+
+* **Average Session Duration**  
+  Calculates how long users spend in the app per session.  
+  Firebase automatically records session durations using `user_engagement` events.  
+  **Formula:** `total_session_time / number_of_sessions`  
+  Longer average durations may suggest strong engagement or that users find value in the app’s features.
+
+* **Number of Habits per Active User**  
+  Measures how many unique habits each active user tracks over a given period.  
+  Pull data from the Firestore `habits` collection and divide total habits by the number of active users in the same timeframe.  
+  **Formula:** `total_habits / active_users`  
+  This metric helps identify how deeply users are adopting the habit-tracking functionality.
   
 ### Adoption Metrics
 
