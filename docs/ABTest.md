@@ -438,255 +438,459 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
 
 ---
 
+## Team Member: Andrew Fleet
 
-Team Member: [Andrew Fleet]
+* **A/B Test Name:** "AI Assistant Toggle: Every Page Placement vs Context-Specific Pages"
 
-A/B Test Name: AI Assistant Toggle: Every Page Placement vs Context-Specific Pages
-User Story Number: US3 , US4 , US5
-Metrics:
+* **User Story Number:** US3, US4, US5
 
-Happiness: User satisfaction with AI accessibility (NPS score, in-app satisfaction ratings)
-Engagement: AI toggle click-through rate, number of AI interactions per session, time spent using AI features
-Adoption: Percentage of users who activate AI toggle at least once, new user AI activation within first week
-Retention: 7-day and 30-day retention rates for users who engage with AI features vs non-AI users
-Task Success: Expense categorization accuracy, budget setup completion rate, financial insight utilization rate
+* **Metrics:** Your team's HEART metrics that this A/B test measures:
+  * **Happiness:** User satisfaction with AI accessibility (NPS score, in-app satisfaction ratings)
+  * **Engagement:** 
+    * AI toggle click-through rate
+    * Number of AI interactions per session
+    * Time spent using AI features
+  * **Adoption:** 
+    * Percentage of users who activate AI toggle at least once
+    * New user AI activation within first week
+  * **Retention:** 
+    * 7-day and 30-day retention rates for users who engage with AI features vs non-AI users
+  * **Task Success:** 
+    * Expense categorization accuracy
+    * Budget setup completion rate
+    * Financial insight utilization rate
 
+* **Hypothesis:** State your hypothesis for this A/B test
+  * **What problem are we trying to solve? Its impact?**
+    
+    **Problem:** Currently only a small percentage of Strive users engage with our AI financial assistant feature, despite data showing AI-assisted users categorize expenses more accurately and efficiently. Many users are unaware the AI exists or cannot find it when they need help with complex financial tasks like setting up budgets or understanding spending patterns.
+    
+    **Impact:** Low AI adoption means users struggle with manual expense categorization, take longer to set up budgets, and miss valuable insights. This leads to frustration, lower engagement, and higher churn rates. Through analytics, we identified that users drop off most frequently during:
+    1. First-time budget creation (45% drop-off rate)
+    2. Bulk expense categorization (38% drop-off rate)
+    3. Monthly spending reviews (52% abandonment rate)
+    
+    These are exactly the tasks where AI assistance would be most valuable.
+    
+    **Bottleneck in the conversion funnel:** The AI assistant is currently buried in Settings → Help → AI Assistant. Users don't discover it when they need it most. Heat map analysis shows users looking for help/guidance during complex financial tasks but not finding accessible support. Additionally, we're unsure if AI should be available everywhere (which might cause "banner blindness") or only on complex screens where it's truly helpful.
+    
+    **Single Variable Being Tested:** We are testing only the AI toggle button placement strategy (global vs context-specific), while keeping all other variables constant (button design, AI functionality, interaction patterns, response quality).
 
-Hypothesis:
+  * **After narrowing down the problem, make a hypothesis:**
+    
+    **Primary Hypothesis (Variation A - Global Placement):** If we place the AI toggle button on every screen in a consistent bottom-right corner, then we will increase AI adoption by 35-40% because users will always know where to find assistance regardless of their task, establishing a predictable pattern for AI access.
+    
+    **Alternative Hypothesis (Variation B - Context-Specific):** If we display the AI toggle only on high-complexity financial screens (expense entry, budget creation, spending analysis, receipt scanning), users will perceive the AI as more intelligent and contextually relevant, leading to 30-40% higher engagement per interaction, though overall discoverability may be 15-20% lower than the global approach.
+    
+    **Variable Being Tested:** AI toggle button placement strategy (every page vs. context-specific pages). All other variables remain constant including button design, AI functionality, and user interaction patterns.
 
-What problem are we trying to solve? Its impact?
+* **Experiment:** Detail out the experiment setup that you will use to test your hypothesis **using Firebase capabilities**. Describe the audiences – will all users be able to view the experiment? Or you will only allocate x% of your user base to the experiment? Lay out the details with the rationale behind this decision. Describe the tracking using Firebase Analytics. With your HEART metrics, what tracking needs to be set up?
 
-Problem: Currently only x% of Strive users engage with our AI financial assistant feature, despite data showing AI-assisted users categorize expenses. Many users are unaware the AI exists or cannot find it when they need help with complex financial tasks like setting up budgets or understanding spending patterns.
-
-Impact: Low AI adoption means users struggle with manual expense categorization, take longer to set up budgets, and miss valuable insights. This leads to frustration, lower engagement, and higher churn rates. Through analytics, we identified that users drop off most frequently during: (1) first-time budget creation, (2) bulk expense categorization , and (3) monthly spending reviews . These are exactly the tasks where AI assistance would be most valuable.
-
-Bottleneck: The AI assistant is currently buried in Settings → Help → AI Assistant. Users don't discover it when they need it most. Additionally, we're unsure if AI should be available everywhere (which might cause "banner blindness") or only on complex screens where it's truly helpful.
-Single Variable: We are testing only the AI toggle button placement strategy (global vs context-specific), while keeping all other variables constant (button design, AI functionality, interaction patterns).
-
-
-Hypothesis Statement:
-
-If we place the AI toggle button on every screen in a consistent bottom-right corner, then we will increase AI adoption by x% because users will always know where to find assistance regardless of their task, establishing a predictable pattern for AI access.
-Alternative Hypothesis: If we display the AI toggle only on high-complexity financial screens (expense entry, budget creation, spending analysis, receipt scanning), users will perceive the AI as more intelligent and contextually relevant, leading to 30-40% higher engagement per interaction, though overall discoverability may be 15-20% lower than the global approach.
-
-
-
-
-Experiment:
-
-Audience Allocation:
-
-Total experiment allocation: 100% of active user base
-Variation A (Global Placement): 50% of users
-Variation B (Context-Specific): 50% of users
-
-
-Rationale: 100% allocation provides sufficient data for statistical significance while equal split between test variations enables clear performance comparison.
-
-Audience Segmentation:
-
-Include: Users who completed onboarding (Day 3+), have logged at least 5 expenses
-
-
-
-Experiment Duration: 21 days minimum to capture full monthly financial cycles and weekend vs weekday usage patterns. 
-
-Firebase Analytics Tracking:
-
-Events to track:
-
-ai_toggle_impression - Parameters: screen_name, expense_count, user_segment, variation_id - Triggers when AI button renders on screen
-ai_toggle_tap - Parameters: screen_name, action (open/close), time_on_screen, variation_id - Triggers on button tap
-ai_conversation_start - Parameters: screen_name, query_type, variation_id - Triggers when user initiates AI chat
-ai_task_completion - Parameters: task_type (categorize/budget/analyze), duration, satisfaction_rating, variation_id - Triggers when AI helps complete a task
-expense_categorization - Parameters: ai_assisted (boolean), time_to_complete, accuracy, variation_id - Triggers on expense save
-budget_setup_flow - Parameters: step_completed, ai_assisted (boolean), abandoned (boolean), variation_id - Triggers at each budget setup step
-user_feedback_survey - Parameters: nps_score, ai_helpfulness_rating, discovery_ease, variation_id - Triggers via weekly prompt
-
-
-Firebase Remote Config:
-
-Key: ai_toggle_strategy
-Values: global, context_specific, control
-Dynamic toggle for real-time variant switching
-
-
-Success Criteria:
-
-Primary: 30% increase in AI feature adoption
-Secondary: 20% improvement in budget setup completion rate
-Secondary: NPS increase of 8+ points for AI users
-
-
-
-Variations:
-
-Variation A: Global AI Toggle (Every Screen)
-
-Description: A persistent AI assistant button appears in the bottom-right corner of every screen in the Strive app. The button is a 54x54px circular design with Strive's brand green gradient and a sparkle/chat icon (✨💬). It remains visible as users navigate through all features.
-Design Specifications:
-
-Position: Fixed bottom-right, 20px from bottom, 20px from right edge
-Size: 54x54px (shrinks to 40x40px after 8 seconds on static screens)
-Color: Brand green gradient (#00C853 to #00E676) with subtle pulse animation
-Icon: Sparkle chat bubble icon
-Interaction: Tap opens AI chat overlay, long-press shows quick actions (categorize expense, analyze spending, budget help)
-Z-index: Always visible but smart positioning avoids blocking primary CTAs and FABs
-
-
-Appears on ALL screens: Dashboard, Add Expense, Expense List, Budget Creation, Budget Overview, Spending Analytics, Receipt Scanner, Categories, Settings, Profile, all other screens
-Mockup - Dashboard with Global AI:
-
-
-
-
-
-      ┌─────────────────────────────┐
-      │ ☰  Strive    October   👤   │
-      ├─────────────────────────────┤
-      │                             │
-      │  Monthly Budget: $3,200     │
-      │  Spent: $2,156 (67%)        │
-      │  [▓▓▓▓▓▓▓░░░]               │
-      │                             │
-      │  Recent Expenses            │
-      │  ┌───────────────────────┐  │
-      │  │ 🍔 Lunch    -$15.99  │  │
-      │  │ ⛽ Gas       -$45.00  │  │
-      │  │ 🎬 Movies   -$24.50  │  │
-      │  └───────────────────────┘  │
-      │                             │
-      │  [➕ Add Expense]            │
-      │                        ┌──┐ │
-      │                        │✨│ │ <- AI Toggle
-      │                        └──┘ │ (Always visible)
-      └─────────────────────────────┘
-```
-    * Mockup - Add Expense Screen with Global AI:
-```
-      ┌─────────────────────────────┐
-      │ ←  Add Expense          ✓   │
-      ├─────────────────────────────┤
-      │                             │
-      │  Amount                     │
-      │  ┌─────────────────────┐    │
-      │  │ $                   │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  Category                   │
-      │  ┌─────────────────────┐    │
-      │  │ Select category ▼   │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  Date                       │
-      │  ┌─────────────────────┐    │
-      │  │ Oct 27, 2025    📅  │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  Notes (optional)           │
-      │  ┌─────────────────────┐    │
-      │  │                     │    │
-      │  └─────────────────────┘    │
-      │                        ┌──┐ │
-      │                        │✨│ │ <- AI Toggle
-      │                        └──┘ │ (Always visible)
-      └─────────────────────────────┘
-```
+  * **Firebase A/B Testing Setup:**
+    
+    We will use Firebase A/B Testing integrated with Firebase Remote Config to control which AI toggle placement strategy users experience.
   
-  * **Variation B: Context-Specific AI Toggle**
-    * Description: The AI assistant button appears only on screens where AI can provide meaningful financial assistance. Uses identical design to Variation A but appears selectively based on task complexity and AI value-add.
-    * Design Specifications: Same 54x54px size, green gradient, sparkle icon, and interaction patterns as Variation A. Includes gentle fade-in animation (300ms) when appearing on eligible screens. Shows contextual tooltip on first appearance: "Need help? AI can assist!"
-    * Screens WHERE AI toggle appears:
-      1. **Add Expense Screen** - AI helps auto-categorize, suggests merchants, detects duplicates
-      2. **Budget Creation Wizard** - AI provides personalized budget recommendations based on spending history
-      3. **Spending Analytics Page** - AI offers insights on spending patterns, trends, and savings opportunities
-      4. **Receipt Scanner** - AI assists with OCR extraction and expense details
-      5. **Bulk Expense Import** - AI helps categorize multiple expenses quickly
-      6. **Category Management** - AI suggests custom categories based on user behavior
-    * Screens where AI toggle does NOT appear:
-      * Simple navigation (Expense List, Category List)
-      * Settings and Profile pages
-      * Static information pages
-      * Payment/Subscription screens
-      * Onboarding flows (separate AI introduction)
-    * Mockup - Budget Creation with AI (Visible):
-```
-      ┌─────────────────────────────┐
-      │ ←  Create Budget            │
-      ├─────────────────────────────┤
-      │                             │
-      │  Set Your Monthly Budget    │
-      │                             │
-      │  Total Income               │
-      │  ┌─────────────────────┐    │
-      │  │ $ 4,500             │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  Budget Categories          │
-      │  ┌─────────────────────┐    │
-      │  │ 🏠 Housing  $1,200  │    │
-      │  │ 🍔 Food     $600    │    │
-      │  │ 🚗 Transport $400   │    │
-      │  │ ➕ Add more...      │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  [Continue]                 │
-      │                        ┌──┐ │
-      │                        │✨│ │ <- AI Toggle
-      │                        └──┘ │ (Visible - can help)
-      └─────────────────────────────┘
-```
-    * Mockup - Expense List (AI Hidden):
-```
-      ┌─────────────────────────────┐
-      │ ☰  Expenses    October  🔍  │
-      ├─────────────────────────────┤
-      │                             │
-      │  October 27                 │
-      │  ┌───────────────────────┐  │
-      │  │ 🍔 Lunch    -$15.99  │  │
-      │  │ ⛽ Gas       -$45.00  │  │
-      │  └───────────────────────┘  │
-      │                             │
-      │  October 26                 │
-      │  ┌───────────────────────┐  │
-      │  │ 🎬 Movies   -$24.50  │  │
-      │  │ 🛒 Grocery  -$87.23  │  │
-      │  └───────────────────────┘  │
-      │                             │
-      │  October 25                 │
-      │  ┌───────────────────────┐  │
-      │  │ ☕ Coffee   -$5.75   │  │
-      │  └───────────────────────┘  │
-      │                             │
-      │  [➕ Add Expense]            │
-      │                             │ <- No AI Toggle
-      └─────────────────────────────┘ (Simple list view)
-```
-    * Mockup - Spending Analytics with AI (Visible):
-```
-      ┌─────────────────────────────┐
-      │ ←  Spending Insights         │
-      ├─────────────────────────────┤
-      │                             │
-      │  October 2025               │
-      │                             │
-      │  Top Categories             │
-      │  ┌─────────────────────┐    │
-      │  │ 🍔 Food      $845   │    │
-      │  │ 🏠 Housing   $1200  │    │
-      │  │ 🚗 Transport $340   │    │
-      │  └─────────────────────┘    │
-      │                             │
-      │  [📊 View Trends]            │
-      │                             │
-      │  Spending Pattern           │
-      │    ▁▃▅▇▆▄▂                  │
-      │                             │
-      │                        ┌──┐ │
-      │                        │✨│ │ <- AI Toggle
-      │                        └──┘ │ (Visible - can analyze)
-      └─────────────────────────────┘
+  * **Audience Allocation:**
+    * **Total experiment allocation:** 100% of active user base
+      * **Variation A (Global Placement):** 50% of users
+      * **Variation B (Context-Specific):** 50% of users
+    
+    **Rationale:** 100% allocation provides sufficient data for statistical significance while equal split between test variations enables clear performance comparison. Since we're replacing the current hidden implementation, there's no need for a control group maintaining the old behavior.
+  
+  * **Audience Segmentation & Targeting:**
+    * **Include:** 
+      * Users who completed onboarding (Day 3+ users)
+      * Users who have logged at least 5 expenses
+      * Both iOS and Android users
+    * **Exclude:**
+      * Brand new users in their first 2 days (to avoid confusing onboarding experience)
+      * Users currently in other active A/B tests
+      * Beta testers and internal team members
+      * Users who haven't logged any expenses yet
+  
+  * **Experiment Duration:**
+    * **Minimum Runtime:** 21 days to capture full monthly financial cycles and weekend vs weekday usage patterns
+    * **Target Sample Size:** 6,000 users per variation (calculated for 80% statistical power, 95% confidence level)
+    * **Early Stopping:** Will not stop before 21 days, even if results appear significant, to capture complete monthly billing cycles
+  
+  * **Firebase Remote Config Parameters:**
+    * **Config Key:** `ai_toggle_strategy`
+    * **Values:**
+      * `global` - AI button appears on every screen
+      * `context_specific` - AI button appears only on high-value screens
+    * **Dynamic Control:** Allows real-time switching between variations without app updates
+  
+  * **Firebase Analytics Event Tracking:**
+    
+    We will implement the following custom events to track HEART metrics:
+    
+    **1. Happiness Metrics:**
+    * Event: `user_feedback_survey`
+      * Parameters: `nps_score` (0-10), `ai_helpfulness_rating` (1-5), `discovery_ease` (1-5), `variation_id`, `user_id`, `timestamp`
+      * Trigger: Weekly in-app prompt to random 20% sample of users
+    
+    **2. Engagement Metrics:**
+    * Event: `ai_toggle_impression`
+      * Parameters: `screen_name`, `expense_count`, `user_segment`, `variation_id`, `session_id`, `timestamp`
+      * Trigger: When AI button renders on screen (impression tracking)
+    
+    * Event: `ai_toggle_tap`
+      * Parameters: `screen_name`, `action` (open/close), `time_on_screen`, `variation_id`, `session_id`, `timestamp`
+      * Trigger: When user taps the AI toggle button
+    
+    * Event: `ai_conversation_start`
+      * Parameters: `screen_name`, `query_type`, `variation_id`, `user_id`, `timestamp`
+      * Trigger: When user initiates AI chat or interaction
+    
+    * Event: `ai_interaction_complete`
+      * Parameters: `screen_name`, `duration_seconds`, `messages_exchanged`, `user_satisfaction`, `variation_id`, `timestamp`
+      * Trigger: When AI conversation ends
+    
+    **3. Adoption Metrics:**
+    * Event: `ai_first_use`
+      * Parameters: `variation_id`, `user_id`, `days_since_signup`, `screen_name`, `timestamp`
+      * Trigger: First time user engages with AI toggle button
+    
+    * Event: `ai_weekly_user`
+      * Parameters: `variation_id`, `user_id`, `total_interactions_this_week`, `timestamp`
+      * Trigger: Once per week for users who used AI at least once
+    
+    **4. Retention Metrics:**
+    * Event: `user_retention_7day`
+      * Parameters: `variation_id`, `user_id`, `used_ai` (boolean), `ai_interaction_count`, `timestamp`
+      * Trigger: When user returns to app on day 7 after experiment start
+    
+    * Event: `user_retention_30day`
+      * Parameters: `variation_id`, `user_id`, `total_ai_interactions`, `tasks_completed`, `timestamp`
+      * Trigger: When user returns to app on day 30
+    
+    **5. Task Success Metrics:**
+    * Event: `ai_task_completion`
+      * Parameters: `task_type` (categorize/budget/analyze), `duration_seconds`, `satisfaction_rating` (1-5), `variation_id`, `timestamp`
+      * Trigger: When AI helps user complete a financial task
+    
+    * Event: `expense_categorization`
+      * Parameters: `ai_assisted` (boolean), `time_to_complete`, `accuracy` (correct/incorrect), `variation_id`, `timestamp`
+      * Trigger: When user saves an expense with category
+    
+    * Event: `budget_setup_flow`
+      * Parameters: `step_completed`, `ai_assisted` (boolean), `abandoned` (boolean), `variation_id`, `timestamp`
+      * Trigger: At each step of budget creation wizard
+    
+    * Event: `spending_insight_view`
+      * Parameters: `insight_type`, `ai_generated` (boolean), `action_taken`, `variation_id`, `timestamp`
+      * Trigger: When user views financial insights on analytics page
+  
+  * **Firebase Analytics Audiences:**
+    
+    Create custom audiences for segmentation analysis:
+    * "AI First-Time Users" - users who triggered `ai_first_use` event
+    * "Frequent AI Users" - users with 5+ AI interactions per week
+    * "Budget Creators" - users who completed budget setup
+    * "High-Value Users" - users with 20+ expenses logged per month
+    * "Drop-off Risk" - users who started budget setup but didn't complete
+  
+  * **Success Criteria:**
+    * **Primary:** 30% increase in AI feature adoption rate (% of users using AI at least once) with p < 0.05
+    * **Secondary:** 20% improvement in budget setup completion rate
+    * **Secondary:** NPS increase of 8+ points for AI users
+    * **Guard Rail:** < 5% decrease in overall app engagement or task completion rates
+
+* **Variations:** In this section, describe what variations you would like to test. Layout the design work related and add diagrams, mockups and designs related to the confirmed variation that you'd like to test.
+
+  ---
+  
+  ### **Variation A: Global AI Toggle (Every Screen)**
+  
+  **Description:**
+  A persistent AI assistant button appears in the bottom-right corner of every screen in the Strive app. The button is a 54x54px circular design with Strive's brand green gradient and a sparkle/chat icon (✨💬). It remains visible as users navigate through all features.
+  
+  **Design Specifications:**
+  * **Position:** Fixed bottom-right corner, 20px from bottom edge, 20px from right edge
+  * **Size:** 54x54px circular button (shrinks to 40x40px after 8 seconds on static screens)
+  * **Visual Style:**
+    * Brand green gradient (#00C853 to #00E676)
+    * Subtle pulse animation (1.0s ease-in-out loop)
+    * Drop shadow for elevation (0px 4px 10px rgba(0,0,0,0.15))
+  * **Icon:** Sparkle chat bubble icon (✨💬)
+  * **Interaction:**
+    * Single tap opens AI chat overlay
+    * Long-press (0.5s) shows quick actions menu (categorize expense, analyze spending, budget help)
+    * Scales slightly on tap for feedback
+  * **Z-index:** Always visible but uses smart positioning to avoid blocking primary CTAs and floating action buttons
+  * **Accessibility:** Includes aria-label "AI Financial Assistant" and meets WCAG AA standards
+  
+  **Appears on ALL screens:**
+  * Dashboard
+  * Add Expense
+  * Expense List
+  * Budget Creation
+  * Budget Overview
+  * Spending Analytics
+  * Receipt Scanner
+  * Category Management
+  * Settings
+  * Profile
+  * All other app screens
+  
+  **Mockup - Dashboard with Global AI:**
+  ```
+  ┌─────────────────────────────┐
+  │ ☰  Strive    October   👤   │
+  ├─────────────────────────────┤
+  │                             │
+  │  Monthly Budget: $3,200     │
+  │  Spent: $2,156 (67%)        │
+  │  [▓▓▓▓▓▓▓░░░]               │
+  │                             │
+  │  Recent Expenses            │
+  │  ┌───────────────────────┐  │
+  │  │ 🍔 Lunch    -$15.99  │  │
+  │  │ ⛽ Gas       -$45.00  │  │
+  │  │ 🎬 Movies   -$24.50  │  │
+  │  └───────────────────────┘  │
+  │                             │
+  │  [➕ Add Expense]            │
+  │                        ┌──┐ │
+  │                        │✨│ │ ← AI Toggle
+  │                        └──┘ │   (Always visible)
+  └─────────────────────────────┘
+  ```
+  
+  **Mockup - Add Expense Screen with Global AI:**
+  ```
+  ┌─────────────────────────────┐
+  │ ←  Add Expense          ✓   │
+  ├─────────────────────────────┤
+  │                             │
+  │  Amount                     │
+  │  ┌─────────────────────┐    │
+  │  │ $                   │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  Category                   │
+  │  ┌─────────────────────┐    │
+  │  │ Select category ▼   │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  Date                       │
+  │  ┌─────────────────────┐    │
+  │  │ Oct 27, 2025    📅  │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  Notes (optional)           │
+  │  ┌─────────────────────┐    │
+  │  │                     │    │
+  │  └─────────────────────┘    │
+  │                        ┌──┐ │
+  │                        │✨│ │ ← AI Toggle
+  │                        └──┘ │   (Always visible)
+  └─────────────────────────────┘
+  ```
+  
+  **User Experience Flow for Variation A:**
+  1. User opens app → Sees AI button on dashboard
+  2. User navigates to any screen → AI button maintains consistent position
+  3. User encounters difficulty → Taps AI button for help
+  4. AI chat overlay slides up → Provides contextual assistance based on current screen
+  5. User learns AI is always available in same location
+  
+  ---
+  
+  ### **Variation B: Context-Specific AI Toggle**
+  
+  **Description:**
+  The AI assistant button appears only on screens where AI can provide meaningful financial assistance. Uses identical design to Variation A but appears selectively based on task complexity and AI value-add potential.
+  
+  **Design Specifications:**
+  * **Position:** Same as Variation A (bottom-right corner, 20px margins)
+  * **Size:** 54x54px circular button
+  * **Visual Style:** Identical to Variation A (green gradient, pulse animation)
+  * **Icon:** Same sparkle chat bubble icon (✨💬)
+  * **Interaction:** Same tap and long-press behaviors as Variation A
+  * **Entrance Animation:** Gentle fade-in with slide-up effect (300ms) when appearing on eligible screens
+  * **Tooltip:** First-time appearance shows contextual tooltip: "Need help? AI can assist!" (auto-dismisses after 3s)
+  * **Exit Animation:** Fade-out (200ms) when navigating away from eligible screens
+  
+  **Screens WHERE AI toggle APPEARS:**
+  1. **Add Expense Screen** - AI helps auto-categorize, suggests merchants, detects duplicates
+  2. **Budget Creation Wizard** - AI provides personalized budget recommendations based on spending history
+  3. **Spending Analytics Page** - AI offers insights on spending patterns, trends, and savings opportunities
+  4. **Receipt Scanner** - AI assists with OCR extraction and expense details
+  5. **Bulk Expense Import** - AI helps categorize multiple expenses quickly
+  6. **Category Management** - AI suggests custom categories based on user behavior
+  
+  **Screens where AI toggle does NOT appear:**
+  * Expense List (simple navigation, viewing only)
+  * Category List (simple viewing)
+  * Settings pages
+  * Profile pages
+  * Static information screens
+  * Payment/Subscription screens
+  * Onboarding flows (separate AI introduction flow)
+  * Simple dashboard views without analytics
+  
+  **Mockup - Budget Creation with AI (Button Visible):**
+  ```
+  ┌─────────────────────────────┐
+  │ ←  Create Budget            │
+  ├─────────────────────────────┤
+  │                             │
+  │  Set Your Monthly Budget    │
+  │                             │
+  │  Total Income               │
+  │  ┌─────────────────────┐    │
+  │  │ $ 4,500             │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  Budget Categories          │
+  │  ┌─────────────────────┐    │
+  │  │ 🏠 Housing  $1,200  │    │
+  │  │ 🍔 Food     $600    │    │
+  │  │ 🚗 Transport $400   │    │
+  │  │ ➕ Add more...      │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  [Continue]                 │
+  │                        ┌──┐ │
+  │                        │✨│ │ ← AI Toggle
+  │                        └──┘ │   (Visible - can help)
+  └─────────────────────────────┘
+  ```
+  
+  **Mockup - Expense List (AI Button Hidden):**
+  ```
+  ┌─────────────────────────────┐
+  │ ☰  Expenses    October  🔍  │
+  ├─────────────────────────────┤
+  │                             │
+  │  October 27                 │
+  │  ┌───────────────────────┐  │
+  │  │ 🍔 Lunch    -$15.99   │  │
+  │  │ ⛽ Gas       -$45.00  │  │
+  │  └───────────────────────┘  │
+  │                             │
+  │  October 26                 │
+  │  ┌───────────────────────┐  │
+  │  │ 🎬 Movies   -$24.50  │   │
+  │  │ 🛒 Grocery  -$87.23  │   │
+  │  └───────────────────────┘  │
+  │                             │
+  │  October 25                 │
+  │  ┌───────────────────────┐  │
+  │  │ ☕ Coffee   -$5.75     │  │
+  │  └───────────────────────┘  │
+  │                             │
+  │  [➕ Add Expense]           │
+  │                             │ ← No AI Toggle
+  └─────────────────────────────┘   (Simple list view)
+  ```
+  
+  **Mockup - Spending Analytics with AI (Button Visible):**
+  ```
+  ┌─────────────────────────────┐
+  │ ←  Spending Insights        │
+  ├─────────────────────────────┤
+  │                             │
+  │  October 2025               │
+  │                             │
+  │  Top Categories             │
+  │  ┌─────────────────────┐    │
+  │  │ 🍔 Food      $845   │    │
+  │  │ 🏠 Housing   $1200  │    │
+  │  │ 🚗 Transport $340   │    │
+  │  └─────────────────────┘    │
+  │                             │
+  │  [📊 View Trends]           │
+  │                             │
+  │  Spending Pattern           │
+  │    ▁▃▅▇▆▄▂                  │
+  │                             │
+  │                        ┌──┐ │
+  │                        │✨│ │ ← AI Toggle
+  │                        └──┘ │   (Visible - can analyze)
+  └─────────────────────────────┘
+  ```
+  
+  **Mockup - Settings Page (AI Button Hidden):**
+  ```
+  ┌─────────────────────────────┐
+  │ ←  Settings                 │
+  ├─────────────────────────────┤
+  │                             │
+  │  Account                    │
+  │  › Profile Information      │
+  │  › Email & Password         │
+  │                             │
+  │  Preferences                │
+  │  › Notifications            │
+  │  › Currency & Format        │
+  │                             │
+  │  Privacy & Security         │
+  │  › Data & Privacy           │
+  │  › Biometric Lock           │
+  │                             │
+  │  About                      │
+  │  › Help & Support           │
+  │                             │ ← No AI Toggle
+  └─────────────────────────────┘   (Not needed here)
+  ```
+  
+  **User Experience Flow for Variation B:**
+  1. User opens app → No AI button on dashboard
+  2. User navigates to expense entry → AI button fades in smoothly
+  3. User sees tooltip on first appearance → Understands AI is available here
+  4. User completes task and navigates to expense list → AI button fades out
+  5. User navigates to analytics page → AI button reappears
+  6. User learns AI appears when it can be most helpful
+  
+  ---
+  
+  ### **Comparison Matrix**
+  
+  | Feature | Variation A (Every Page) | Variation B (Context-Specific) |
+  |---------|-------------------------|--------------------------------|
+  | **Visibility** | High - Always present | Medium - Selective appearance |
+  | **Discovery Rate** | Highest expected (35-40% lift) | Moderate expected (25-30% lift) |
+  | **Context Relevance** | Mixed - not always needed | High - appears when valuable |
+  | **Perceived Value** | Risk of generic/ignored | Higher - smart contextual placement |
+  | **User Learning Curve** | Easy - consistent location | Slightly higher - appears/disappears |
+  | **Clutter/Intrusiveness** | Moderate risk on simple screens | Low risk - only on complex screens |
+  | **Engagement Quality** | Potentially lower per interaction | Higher expected per interaction |
+  | **Banner Blindness Risk** | Higher | Lower |
+
+---
+
+## Analysis Plan
+
+After 21 days, we will analyze results using Firebase A/B Testing console and Firebase Analytics:
+
+### Statistical Analysis
+* **Significance Testing:** Two-tailed t-tests comparing both variations
+* **Required Confidence:** 95% (p < 0.05)
+* **Effect Size:** Calculate Cohen's d for practical significance
+* **Sample Size Validation:** Ensure minimum 6,000 users per variation reached
+
+### Segmentation Analysis
+Break down results by:
+* User tenure (new users Days 3-30 vs established users 30+ days)
+* Usage frequency (daily, weekly, monthly active users)
+* Platform (iOS vs Android)
+* Financial behavior (budget users vs non-budget users, high vs low expense volume)
+* AI interaction depth (single use vs multi-use vs power users)
+
+### Decision Framework
+* **Clear Winner:** If one variation shows >25% improvement in adoption with p < 0.05 and no negative impact on retention, roll out to 100%
+* **Mixed Results:** If Variation A wins adoption but Variation B wins engagement quality, consider hybrid approach (global with smart contextual hints)
+* **No Significant Difference:** If neither variation significantly outperforms the other (<10% difference), choose Variation B for lower intrusiveness
+* **Negative Results:** If both variations decrease key metrics, revert to current implementation and investigate user feedback
+
+---
+
+*Add your A/B tests below following the same format*
+
+---
+
 
 # A/B Testing Documentation
 
