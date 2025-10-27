@@ -45,6 +45,17 @@ HEART Framework Metrics
 
 * **Time to first habit created** - Calculate difference between Firebase Authentication `creationTime` and earliest `createdAt` timestamp in user's Firestore `habits` subcollection. Store aggregated data in BigQuery or calculate on-demand.
 
+### Retention Metrics
+
+* **User Retention / Churn Rate** - Firebase Analytics provides retention cohort reports. Export to BigQuery for custom cohort analysis, or use Firebase Predictions to identify churn risk.
+
+* **30/90 day retention rate** - Firebase Analytics automatically calculates this. View in Retention reports under "Users returning after N days." Filter by 30-day and 90-day windows.
+
+* **Premium subscription renewal rate** - Integrate RevenueCat or use Firebase Extensions for in-app purchases. Track subscription status in Firestore `subscriptions` collection with fields: `userId`, `status`, `startDate`, `renewalDate`, `isRenewed`. Calculate renewal rate from users whose `renewalDate` passed and `isRenewed: true`.
+
+* **Average user lifetime (days)** - Calculate from Firebase Authentication `creationTime` to either last app session (`lastSignInTime`) or account deletion. Store in BigQuery for lifecycle analysis, or calculate with Cloud Functions on user churn events.
+
+
 ### Task Success Metrics
 
 * **Average Savings Per User per Month** - Query Firestore `habits` collection for habits marked as "savings" (vs "drains"). Sum `costPerOccurrence * timesCompleted` per user per month. Store monthly aggregates in `user_stats` collection.
