@@ -1144,3 +1144,342 @@ The submit button is integrated into or immediately adjacent to the prompt bar o
 - **Ship Variant:** If primary success criteria met + no critical regressions
 - **Iterate:** If promising but not statistically significant → extend test or refine button design/positioning
 - **Keep Control:** If no improvement or negative impact detected
+
+# A/B Test Story: Numerical vs. Graphical Weekly Spending Comparison
+
+## A/B Test Name
+**"Weekly Spending Comparison: Numerical vs. Graphical Display"**
+
+## User Story Number
+**US4** (Golden Path)
+
+## Metrics
+This A/B test measures the following HEART metrics:
+
+- **Happiness**: User satisfaction with data visualization clarity (measured via in-app survey)
+- **Engagement**: 
+  - Time spent on trend analysis page
+  - Frequency of visits to trend analysis page
+  - Interaction rate with comparison data (clicks, hovers, taps)
+- **Adoption**: Percentage of users who view weekly comparison data within first 7 days
+- **Retention**: Week-over-week return rate to trend analysis page
+- **Task Success**: 
+  - Ability to correctly identify spending increases/decreases (measured via optional quiz)
+  - Time to comprehend spending changes
+
+---
+
+## Hypothesis
+
+### Problem Statement
+Users are not effectively engaging with their weekly spending comparison data on the trend analysis page. Current analytics show:
+- **65% of users** who land on the trend analysis page **spend less than 5 seconds** viewing the weekly comparison section
+- **Only 28% of users** return to the trend analysis page within a week
+- User interviews reveal confusion about whether spending is improving or worsening week-over-week
+
+**Impact**: This is a critical problem because understanding spending trends is a core value proposition of our app. If users cannot quickly grasp their financial progress, they lose motivation to continue tracking, leading to churn. Our data shows users who regularly check their trend analysis have **3.2x higher retention** at 90 days.
+
+### Bottleneck Analysis
+The conversion funnel shows a significant drop-off:
+1. 100% - Users land on trend analysis page
+2. 45% - Users scroll to weekly comparison section
+3. 28% - Users spend >5 seconds viewing comparison
+4. 12% - Users return within 7 days
+
+The bottleneck is at the **engagement with comparison data** stage.
+
+### Root Cause Hypothesis
+The current numerical display requires cognitive effort to interpret the data. Users must read two numbers, calculate the difference mentally, and determine if the trend is positive or negative. This friction causes users to disengage before gaining insights.
+
+### Proposed Solution
+**Variation B (Graphical Display)** will present weekly spending comparisons using two side-by-side bar graphs. Visual representation should:
+- Reduce cognitive load by making comparisons immediately apparent
+- Increase engagement through more appealing visual design
+- Improve comprehension speed by leveraging visual pattern recognition
+
+**Expected Outcome**: Graphical display will increase time spent on trend analysis page by 40% and improve 7-day return rate by 25%.
+
+### Variable Being Tested
+**Single variable**: Display format of weekly spending comparison (numerical vs. graphical)
+
+---
+
+## Experiment Setup
+
+### Firebase Configuration
+
+**Experiment Name**: `weekly_comparison_display_format`
+
+**Experiment ID**: `exp_trend_viz_001`
+
+### Audience Allocation
+
+**Total Experiment Population**: 80% of active users
+- **Control Group (Variation A - Numerical)**: 40% of users
+- **Treatment Group (Variation B - Graphical)**: 40% of users
+- **Holdout Group**: 20% of users (excluded from experiment)
+
+**Eligibility Criteria**:
+- Users who have been active for at least 14 days (ensures they have sufficient data for weekly comparisons)
+- Users who have visited the trend analysis page at least once
+- Users on app version 2.5.0 or higher
+
+**Rationale for Audience Allocation**:
+- **80% allocation**: Allows us to gather statistically significant data quickly while maintaining a safety net (20% holdout) in case of technical issues
+- **50/50 split** between variations: Standard practice for A/B testing to ensure equal sample sizes
+- **Active users only**: New users without historical data cannot see meaningful weekly comparisons
+- **Version requirement**: Ensures Firebase SDK compatibility and consistent rendering
+
+### Duration
+- **Test Duration**: 21 days (3 weeks)
+- **Rationale**: Captures 3 full weekly cycles, accounting for day-of-week behavioral variations and providing sufficient time for engagement patterns to emerge
+
+### Success Criteria
+The test will be considered successful if Variation B achieves:
+- **Primary metric**: ≥20% increase in time spent on trend analysis page (statistical significance: p < 0.05)
+- **Secondary metric**: ≥15% increase in 7-day return rate
+- **Guardrail metric**: No decrease >5% in overall app engagement
+
+---
+
+## Firebase Analytics Tracking Setup
+
+### Events to Track
+
+#### 1. Page View Events
+```
+Event: trend_analysis_page_view
+Parameters:
+  - user_id
+  - session_id
+  - variation (control/treatment)
+  - timestamp
+  - entry_point (navigation/deep_link/push_notification)
+```
+
+#### 2. Comparison View Events
+```
+Event: weekly_comparison_viewed
+Parameters:
+  - user_id
+  - variation
+  - view_duration (seconds)
+  - timestamp
+  - scroll_depth (percentage)
+```
+
+#### 3. Interaction Events
+```
+Event: comparison_interaction
+Parameters:
+  - user_id
+  - variation
+  - interaction_type (tap/hover/zoom)
+  - element_id
+  - timestamp
+```
+
+#### 4. Comprehension Events (Optional Survey)
+```
+Event: comparison_quiz_completed
+Parameters:
+  - user_id
+  - variation
+  - correct_answers
+  - total_questions
+  - completion_time (seconds)
+```
+
+#### 5. Return Visit Events
+```
+Event: trend_page_return_visit
+Parameters:
+  - user_id
+  - variation
+  - days_since_last_visit
+  - timestamp
+```
+
+### Custom User Properties
+```
+User Property: experiment_group
+Values: control_numerical / treatment_graphical / holdout
+```
+
+### Firebase Remote Config
+Use Remote Config to dynamically serve variations:
+```
+Parameter: weekly_comparison_display_type
+Default: numerical
+Conditional values:
+  - If experiment_group == "control_numerical": numerical
+  - If experiment_group == "treatment_graphical": graphical
+```
+
+### Firebase A/B Testing Integration
+- **Primary Goal**: Maximize `weekly_comparison_viewed` duration
+- **Secondary Goals**: 
+  - Increase `trend_page_return_visit` frequency
+  - Improve `comparison_quiz_completed` accuracy score
+
+---
+
+## Variations
+
+### **Variation A: Control - Numerical Display**
+
+#### Description
+Current implementation showing weekly spending as numerical values with percentage change.
+
+#### Design Elements
+- Two numerical values displayed vertically or horizontally
+- "This Week" and "Last Week" labels
+- Percentage change indicator with color coding (green for decrease, red for increase in spending)
+- Currency formatted with $ symbol
+
+#### Mockup - Variation A (Numerical)
+```
+┌─────────────────────────────────────┐
+│      Weekly Spending Comparison     │
+├─────────────────────────────────────┤
+│                                     │
+│  This Week:        $487.32          │
+│  Last Week:        $562.18          │
+│                                     │
+│  Difference:       -$74.86          │
+│  Change:           ↓ 13.3%          │
+│                                     │
+│  [You spent 13.3% less this week]   │
+│  Great job! 🎉                      │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+#### Technical Implementation
+- Simple text labels and values
+- CSS styling for color-coded change indicators
+- Lightweight, fast rendering
+
+---
+
+### **Variation B: Treatment - Graphical Display**
+
+#### Description
+Weekly spending displayed as two side-by-side bar graphs with visual comparison and summary text.
+
+#### Design Elements
+- Two vertical bar charts positioned side-by-side
+- Y-axis shows spending amount with grid lines
+- X-axis labels: "Last Week" and "This Week"
+- Color-coded bars (neutral blue for last week, green/red for this week based on change)
+- Percentage change badge overlay
+- Visual height difference makes trend immediately apparent
+- Supporting numerical values displayed below bars
+
+#### Mockup - Variation B (Graphical)
+```
+┌─────────────────────────────────────────────┐
+│        Weekly Spending Comparison           │
+├─────────────────────────────────────────────┤
+│                                             │
+│   $600 ┤                                    │
+│        │     ████                           │
+│   $500 ┤     ████                           │
+│        │     ████                           │
+│   $400 ┤     ████          ████             │
+│        │     ████          ████             │
+│   $300 ┤     ████          ████             │
+│        │     ████          ████             │
+│   $200 ┤     ████          ████             │
+│        │     ████          ████             │
+│   $100 ┤     ████          ████             │
+│        │     ████          ████             │
+│     $0 ┴─────────────────────────────       │
+│         Last Week      This Week            │
+│          $562.18        $487.32             │
+│                                             │
+│        ┌──────────────┐                     │
+│        │  ↓ 13.3%     │                     │
+│        └──────────────┘                     │
+│                                             │
+│   You spent $74.86 less this week           │
+│   Keep up the great work! 🎉                │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+#### Interactive Features
+- Tap on bars to see exact values in tooltip
+- Subtle animation on page load (bars grow from $0 to actual value)
+- Haptic feedback on mobile when interacting with bars
+
+#### Technical Implementation
+- Chart.js or Recharts library for rendering
+- Responsive design for different screen sizes
+- Accessibility: ARIA labels for screen readers describing the comparison
+- Cached rendering to maintain performance
+
+---
+
+## Design Assets Required
+
+### For Variation A (Minimal Changes)
+- ✅ Already implemented (current production design)
+- No additional design work needed
+
+### For Variation B (New Design)
+1. **High-fidelity mockups** showing:
+   - Mobile view (iOS and Android)
+   - Tablet view
+   - Web view (if applicable)
+   - Various spending scenarios (increase, decrease, no change)
+   
+2. **Interactive prototype** demonstrating:
+   - Bar tap interactions
+   - Animation sequences
+   - Tooltip displays
+
+3. **Design specifications**:
+   - Color palette (bar colors, grid lines, background)
+   - Typography (axis labels, values, summary text)
+   - Spacing and padding measurements
+   - Animation timing and easing curves
+
+4. **Accessibility documentation**:
+   - Color contrast ratios
+   - Screen reader announcements
+   - Alternative text descriptions
+
+---
+
+## Risk Assessment & Mitigation
+
+### Potential Risks
+
+1. **Performance Impact**: Graphical rendering may slow down page load
+   - **Mitigation**: Implement lazy loading, optimize chart library bundle size, monitor performance metrics
+
+2. **Data Accuracy**: Visual representations might be misinterpreted
+   - **Mitigation**: Include numerical values alongside graphs, use clear labels and legends
+
+3. **User Confusion**: Some users may prefer numerical data
+   - **Mitigation**: Monitor feedback channels, consider adding a toggle option in future iteration
+
+---
+
+## Decision Framework
+
+### When to Ship Variation B
+- Primary metric shows ≥20% improvement with p < 0.05
+- No negative impact on guardrail metrics
+- No critical bugs or user complaints in feedback
+
+### When to Ship Variation A (Keep Control)
+- No significant difference between variations (p > 0.10)
+- Variation B shows worse performance on primary or secondary metrics
+- Technical issues persist beyond acceptable threshold
+
+### When to Iterate
+- Results are promising but not conclusive (10-20% improvement, 0.05 < p < 0.10)
+- User feedback suggests modifications to graphical approach
+- Consider hybrid approach or user preference toggle
