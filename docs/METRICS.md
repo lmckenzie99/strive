@@ -1,6 +1,8 @@
 HEART Framework Metrics
 - https://docs.google.com/presentation/d/1DQiLZtovgMRINwEHNepGJAObAbs4A98cLrvkJ5Q9jdk/edit?usp=sharing
 
+## Data Collection Methods by Metric
+
 ### Happiness Metrics
 
 * **Net Promoter Score (NPS)** - Implement an in-app survey prompt (Firebase Cloud Functions trigger after 7 days of usage) asking "How likely are you to recommend Strive to a friend?" (0-10 scale). Store responses in Firestore collection `nps_surveys` with fields: `userId`, `score`, `timestamp`, `feedback_text`.  
@@ -66,3 +68,11 @@ HEART Framework Metrics
 
 * **Support ticket volume** - If using Firebase Extensions for customer support, track tickets in Firestore. Otherwise, integrate with third-party support tools (Zendesk, Intercom) and pull data via API. Store monthly counts in `support_metrics` collection or export to BigQuery for trending analysis.
 
+---
+
+**Infrastructure Notes:**
+- Enable Firebase Analytics and link to Google Analytics 4 for comprehensive tracking
+- Set up BigQuery export for advanced querying and long-term data warehousing
+- Use Firebase Cloud Functions to calculate complex metrics nightly and cache results
+- Implement proper user privacy controls and anonymization for sensitive financial data
+- Create custom Firebase Analytics events for all user actions not automatically tracked
