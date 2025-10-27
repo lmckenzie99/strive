@@ -519,9 +519,6 @@ Secondary: NPS increase of 8+ points for AI users
 
 
 
-
-
-
 Variations:
 
 Variation A: Global AI Toggle (Every Screen)
@@ -691,3 +688,255 @@ Mockup - Dashboard with Global AI:
       │                        └──┘ │ (Visible - can analyze)
       └─────────────────────────────┘
 
+# A/B Testing Documentation
+
+## A/B Test Story: Button Placement in Guidance AI Page
+
+### User Story Number
+US 4 (Guidance AI Interaction)
+
+### A/B Test Name
+Guidance AI Prompt Submission: Integrated vs Separated Button Placement
+
+---
+
+## Metrics
+
+### HEART Metrics:
+- **Happiness:** User satisfaction with the prompt submission interface (measured through post-interaction survey or feedback)
+- **Engagement:** Prompt submission rate, time to first prompt submission, frequency of prompt revisions
+- **Adoption:** Percentage of users who submit at least one prompt within their first session
+- **Retention:** Return rate of users to Guidance AI page within 7 days
+- **Task Success:** Successful prompt submissions on first attempt, reduced hesitation time, lower abandonment rate
+
+### Primary KPIs:
+- Prompt submission completion rate
+- Time-to-first-submission (from page load to first prompt sent)
+- Click accuracy rate (clicks on submit button vs misclicks)
+- Prompt abandonment rate (users who type but don't submit)
+- Interaction confusion rate (cursor hovering without action, multiple button searches)
+
+---
+
+## Hypothesis
+
+### Problem Statement
+Our current Guidance AI page uses a separated button placement model where the submit button is positioned at the bottom of the page, distinct from the prompt input area. This design pattern may be causing friction and reduced submission rates because:
+
+1. **User Expectation Mismatch:** The majority of AI chat interfaces (ChatGPT, Claude, Grok) use an integrated button approach where the submit action is immediately adjacent to or within the prompt bar. Users have been conditioned by these market leaders to expect the submit button in close proximity to where they type.
+
+2. **Visual Separation Issues:** Placing the button at the bottom of the page creates a spatial disconnect between the input action (typing) and the submission action (clicking button). This may increase cognitive load as users must shift their visual focus away from the prompt area to locate the submit button.
+
+3. **Platform Conventions:** ChatGPT established the "OG format" that has become the de facto standard for AI interfaces. Claude and Grok followed this pattern, suggesting industry consensus on optimal UX. Only Gemini uses a different approach, and we're uncertain if users prefer this deviation.
+
+4. **Reduced Discoverability:** Users may not immediately notice the separated button, especially on first use, leading to confusion about how to submit their prompt.
+
+**Impact Size:** Based on preliminary observations, we suspect users may be experiencing hesitation or abandonment when trying to submit prompts. Analytics suggest potential friction in the submission flow, though exact metrics will be established during test baseline period.
+
+### Hypothesis Statement
+We believe that implementing an integrated button placement (positioned inside or immediately adjacent to the prompt bar on the right side, following the ChatGPT/Claude/Grok pattern) will result in a **12-15% increase in prompt submission completion rates** and a **20% reduction in time-to-first-submission** because the integrated placement aligns with established AI chat interface conventions, reduces spatial scanning, decreases cognitive load, and leverages user familiarity with the dominant market pattern.
+
+**What we're changing:** Only the position of the submit button (bottom of page → integrated with prompt bar on the right). All other elements including prompt bar design, page layout, and functionality remain constant.
+
+## Experiment Setup
+
+### Audience Segmentation
+
+#### Phase 1 (Initial Test - 2 weeks)
+- **Control Group (Separated Button - Gemini-style):** 50% of users accessing Guidance AI page
+- **Variant Group (Integrated Button - ChatGPT/Claude-style):** 50% of users accessing Guidance AI page
+- **Exclusions:** None initially, though we may segment by new vs. returning users in analysis to understand differential impact
+- **Rationale:** A 50/50 split ensures adequate sample size for both groups while managing risk. We're including all users (new and returning) to understand broad impact across user familiarity levels.
+
+**Sample Size Calculation:** Based on current Guidance AI page traffic (~[INSERT MONTHLY TRAFFIC] users/month), we'll need approximately [INSERT CALCULATED NUMBER] users per variant to detect a 12-15% relative improvement with 95% confidence and 80% power.
+
+### Firebase Implementation
+
+#### Firebase Remote Config Setup:
+- **Parameter:** `guidance_button_placement`
+- **Values:**
+  - Control: `"separated"` (button at bottom of page)
+  - Variant: `"integrated"` (button integrated with prompt bar)
+- **Condition:** All users accessing Guidance AI page
+
+#### Firebase A/B Testing Setup:
+- **Experiment Name:** `guidance_ai_button_placement`
+- **Targeting:** 100% of users accessing Guidance AI page
+- **Duration:** 14 days minimum (or until statistical significance)
+- **Primary Goal:** Custom conversion event `"guidance_prompt_submitted"`
+
+---
+
+### Firebase Analytics Tracking
+
+#### Events to Track:
+
+1. **guidance_page_view**
+   - Parameters: `button_variant` (separated/integrated), `user_type` (new/returning), `session_id`
+
+2. **guidance_prompt_input_start**
+   - Parameters: `button_variant`, `timestamp`, `session_id`
+
+3. **guidance_prompt_input_focus**
+   - Parameters: `button_variant`, `focus_duration` (ms), `characters_typed`
+
+4. **guidance_button_search_indicator**
+   - Triggers when: Cursor hovers around page for >3 seconds after typing, or multiple clicks outside button area
+   - Parameters: `search_time` (ms), `button_variant`, `click_attempts`
+
+5. **guidance_prompt_submitted**
+   - Parameters: `button_variant`, `time_to_submit` (ms from page load), `prompt_length`, `submission_method` (button_click/enter_key)
+
+6. **guidance_prompt_abandoned**
+   - Triggers when: User types >10 characters but leaves page without submitting
+   - Parameters: `characters_typed`, `time_on_page`, `button_variant`, `cursor_position_last`
+
+7. **guidance_button_click**
+   - Parameters: `button_variant`, `click_accuracy` (direct_click/after_search), `time_from_input_end` (ms)
+
+8. **guidance_enter_key_submit**
+   - Parameters: `button_variant`, `prompt_length`
+
+9. **guidance_error_state**
+   - Parameters: `error_type`, `button_variant`, `user_action_attempted`
+
+#### User Properties:
+- `button_placement_variant`: [separated/integrated]
+- `guidance_submission_status`: [completed/abandoned/in_progress]
+- `guidance_user_experience_level`: [first_time/returning]
+
+#### Conversion Funnel Tracking:
+1. `guidance_page_view` (entry)
+2. `guidance_prompt_input_start`
+3. `guidance_prompt_input_focus`
+4. `guidance_button_click` OR `guidance_enter_key_submit`
+5. `guidance_prompt_submitted` (success)
+
+---
+
+## Variations
+
+### Control: Separated Button (Current Design - Gemini-style)
+
+#### Description
+The submit button is positioned at the bottom of the page, spatially separated from the prompt input area. Users type their prompt in the text input field, then must locate and click the button below to submit.
+
+#### Technical Implementation:
+- **Button Position:** Fixed or positioned at bottom of page container
+- **Layout:** Prompt bar spans width of container, button appears below with margin spacing
+- **Visual Separation:** Clear vertical space between prompt input and button
+- **Enter Key Behavior:** [Specify current behavior - submits or new line]
+
+#### Design Mockup - Control (Separated):
+```
+┌─────────────────────────────────────────┐
+│         Guidance AI Page                │
+│                                         │
+│  ┌───────────────────────────────────┐ │
+│  │                                   │ │
+│  │  Enter your prompt here...        │ │
+│  │                                   │ │
+│  └───────────────────────────────────┘ │
+│                                         │
+│              (spacing)                  │
+│                                         │
+│         ┌─────────────────┐             │
+│         │  Submit Prompt  │             │
+│         └─────────────────┘             │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+#### User Flow:
+1. User clicks into prompt input area
+2. User types their prompt
+3. User shifts visual focus down to locate submit button
+4. User moves cursor/clicks to button
+5. User clicks to submit
+
+
+### Variant: Integrated Button (ChatGPT/Claude/Grok-style)
+
+#### Description
+The submit button is integrated into or immediately adjacent to the prompt bar on the right side. Users type their prompt and can immediately submit by clicking the button positioned within their visual field, following the pattern established by ChatGPT, Claude, and Grok.
+
+#### Technical Implementation:
+- **Button Position:** Right side of prompt bar, inline with input area
+- **Layout:** Prompt bar contains both text input and submit button in unified component
+- **Integration Style:** Button appears as icon or small button inside prompt bar right edge (similar to send icon in messaging apps)
+- **Visual Cohesion:** Button and input share same container/border
+- **Enter Key Behavior:** [Should match control - specify behavior]
+- **Responsive Behavior:** Button remains visible and accessible at all screen sizes
+
+#### Design Mockup - Variant (Integrated):
+```
+┌─────────────────────────────────────────┐
+│         Guidance AI Page                │
+│                                         │
+│  ┌───────────────────────────────────┐ │
+│  │                                ┌─┐│ │
+│  │  Enter your prompt here...     │→││ │
+│  │                                └─┘│ │
+│  └───────────────────────────────────┘ │
+│                                         │
+│                                         │
+│                                         │
+│                                         │
+│                                         │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+**Alternative Variant Design (Outside but Adjacent):**
+```
+┌─────────────────────────────────────────┐
+│         Guidance AI Page                │
+│                                         │
+│  ┌─────────────────────────────┐  ┌──┐ │
+│  │                             │  │→ │ │
+│  │  Enter your prompt here...  │  └──┘ │
+│  │                             │       │
+│  └─────────────────────────────┘       │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+#### User Flow:
+1. User clicks into prompt input area
+2. User types their prompt
+3. User clicks submit button immediately visible to the right (minimal eye/cursor movement)
+4. Prompt submitted
+
+#### Visual Design Changes:
+- **Button Icon:** Use right arrow (→) or paper plane icon consistent with AI chat conventions
+- **Button State:** 
+  - Disabled/grey when prompt is empty
+  - Active/colored when text is present
+  - Hover state with subtle animation
+- **Spacing:** Minimal padding between input edge and button (2-4px)
+- **Size:** Button should be clearly clickable (minimum 32x32px touch target for mobile)
+
+#### Accessibility Considerations:
+- Maintain keyboard navigation support (Tab to focus button)
+- Ensure Enter key behavior is consistent across both variants
+- Screen reader announces button position and state
+- Sufficient color contrast for button in all states
+- Button label/aria-label: "Submit prompt" or "Send"
+
+## Success Criteria
+
+### Primary Success Metrics (must achieve 2 of 3):
+1. **≥12% increase in prompt submission completion rate**
+2. **≥20% reduction in time-to-first-submission**
+3. **≥25% reduction in button search indicators** (cursor hovering, search time)
+
+### Secondary Success Metrics:
+- No increase in accidental submissions (error rate)
+- Maintain or improve user satisfaction scores
+- No negative impact on accessibility metrics
+- Consistent performance across device types (desktop/mobile/tablet)
+
+### Decision Framework:
+- **Ship Variant:** If primary success criteria met + no critical regressions
+- **Iterate:** If promising but not statistically significant → extend test or refine button design/positioning
+- **Keep Control:** If no improvement or negative impact detected
