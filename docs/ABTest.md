@@ -438,13 +438,14 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
 
 ---
 
-## Team Member: Andrew Fleet
+## **A/B Test Name:** "AI Assistant Toggle: Every Page Placement vs Context-Specific Pages"  
 
-* **A/B Test Name:** "AI Assistant Toggle: Every Page Placement vs Context-Specific Pages"
+---
 
-* **User Story Number:** US3, US4, US5
+## **User Story Number:**  
+US3, US4, US5
 
-* **Metrics:** Your team's HEART metrics that this A/B test measures:
+## **Metrics:**
   * **Happiness:** User satisfaction with AI accessibility (NPS score, in-app satisfaction ratings)
   * **Engagement:** 
     * AI toggle click-through rate
@@ -460,31 +461,38 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
     * Budget setup completion rate
     * Financial insight utilization rate
 
-* **Hypothesis:** State your hypothesis for this A/B test
+## **Hypothesis:** State your hypothesis for this A/B test
   * **What problem are we trying to solve? Its impact?**
     
-    **Problem:** Currently only a small percentage of Strive users engage with our AI financial assistant feature, despite data showing AI-assisted users categorize expenses more accurately and efficiently. Many users are unaware the AI exists or cannot find it when they need help with complex financial tasks like setting up budgets or understanding spending patterns.
+   ## **Problem:** 
+   Currently only a small percentage of Strive users engage with our AI financial assistant feature, despite data showing AI-assisted users categorize expenses more accurately and efficiently. Many users are unaware the AI exists or cannot find it when they need help with complex financial tasks like setting up budgets or understanding spending patterns.
     
-    **Impact:** Low AI adoption means users struggle with manual expense categorization, take longer to set up budgets, and miss valuable insights. This leads to frustration, lower engagement, and higher churn rates. Through analytics, we identified that users drop off most frequently during:
+  ##**Impact:**  
+  Low AI adoption means users struggle with manual expense categorization, take longer to set up budgets, and miss valuable insights. This leads to frustration, lower engagement, and higher churn rates. Through analytics, we identified that users drop off most frequently during:
     1. First-time budget creation (45% drop-off rate)
     2. Bulk expense categorization (38% drop-off rate)
     3. Monthly spending reviews (52% abandonment rate)
     
-    These are exactly the tasks where AI assistance would be most valuable.
+   These are exactly the tasks where AI assistance would be most valuable.
     
-    **Bottleneck in the conversion funnel:** The AI assistant is currently buried in Settings → Help → AI Assistant. Users don't discover it when they need it most. Heat map analysis shows users looking for help/guidance during complex financial tasks but not finding accessible support. Additionally, we're unsure if AI should be available everywhere (which might cause "banner blindness") or only on complex screens where it's truly helpful.
+  **Bottleneck in the conversion funnel:** 
+  The AI assistant is currently buried in Settings → Help → AI Assistant. Users don't discover it when they need it most. Heat map analysis shows users looking for help/guidance during complex financial tasks but not finding accessible support. Additionally, we're unsure if AI should be available everywhere (which might cause "banner blindness") or only on complex screens where it's truly helpful.
     
-    **Single Variable Being Tested:** We are testing only the AI toggle button placement strategy (global vs context-specific), while keeping all other variables constant (button design, AI functionality, interaction patterns, response quality).
+  **Single Variable Being Tested:**  
+  We are testing only the AI toggle button placement strategy (global vs context-specific), while keeping all other variables constant (button design, AI functionality, interaction patterns, response quality).
 
-  * **After narrowing down the problem, make a hypothesis:**
+## **Hypothesis:**
     
-    **Primary Hypothesis (Variation A - Global Placement):** If we place the AI toggle button on every screen in a consistent bottom-right corner, then we will increase AI adoption by 35-40% because users will always know where to find assistance regardless of their task, establishing a predictable pattern for AI access.
+  **Primary Hypothesis (Variation A - Global Placement):** 
+  If we place the AI toggle button on every screen in a consistent bottom-right corner, then we will increase AI adoption by 35-40% because users will always know where to find assistance regardless of their task, establishing a predictable pattern for AI access.
     
-    **Alternative Hypothesis (Variation B - Context-Specific):** If we display the AI toggle only on high-complexity financial screens (expense entry, budget creation, spending analysis, receipt scanning), users will perceive the AI as more intelligent and contextually relevant, leading to 30-40% higher engagement per interaction, though overall discoverability may be 15-20% lower than the global approach.
+   **Alternative Hypothesis (Variation B - Context-Specific):** 
+   If we display the AI toggle only on high-complexity financial screens (expense entry, budget creation, spending analysis, receipt scanning), users will perceive the AI as more intelligent and contextually relevant, leading to 30-40% higher engagement per interaction, though overall discoverability may be 15-20% lower than the global approach.
     
-    **Variable Being Tested:** AI toggle button placement strategy (every page vs. context-specific pages). All other variables remain constant including button design, AI functionality, and user interaction patterns.
-
-* **Experiment:** Detail out the experiment setup that you will use to test your hypothesis **using Firebase capabilities**. Describe the audiences – will all users be able to view the experiment? Or you will only allocate x% of your user base to the experiment? Lay out the details with the rationale behind this decision. Describe the tracking using Firebase Analytics. With your HEART metrics, what tracking needs to be set up?
+  **Variable Being Tested:**  
+  AI toggle button placement strategy (every page vs. context-specific pages). All other variables remain constant including button design, AI functionality, and user interaction patterns.
+---
+## **Experiment:** 
 
   * **Firebase A/B Testing Setup:**
     
@@ -495,7 +503,8 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
       * **Variation A (Global Placement):** 50% of users
       * **Variation B (Context-Specific):** 50% of users
     
-    **Rationale:** 100% allocation provides sufficient data for statistical significance while equal split between test variations enables clear performance comparison. Since we're replacing the current hidden implementation, there's no need for a control group maintaining the old behavior.
+    **Rationale:**
+    100% allocation provides sufficient data for statistical significance while equal split between test variations enables clear performance comparison. Since we're replacing the current hidden implementation, there's no need for a control group maintaining the old behavior.
   
   * **Audience Segmentation & Targeting:**
     * **Include:** 
@@ -596,8 +605,7 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
     * **Secondary:** NPS increase of 8+ points for AI users
     * **Guard Rail:** < 5% decrease in overall app engagement or task completion rates
 
-* **Variations:** In this section, describe what variations you would like to test. Layout the design work related and add diagrams, mockups and designs related to the confirmed variation that you'd like to test.
-
+* **Variations:**
   ---
   
   ### **Variation A: Global AI Toggle (Every Screen)**
@@ -778,7 +786,7 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
   │                             │
   │  October 25                 │
   │  ┌───────────────────────┐  │
-  │  │ ☕ Coffee   -$5.75     │  │
+  │  │ ☕ Coffee   -$5.75    │  │
   │  └───────────────────────┘  │
   │                             │
   │  [➕ Add Expense]           │
@@ -804,7 +812,7 @@ Test whether switching the Detail Analysis visualization from a pie chart to a b
   │  [📊 View Trends]           │
   │                             │
   │  Spending Pattern           │
-  │    ▁▃▅▇▆▄▂                  │
+  │    ▁▃▅▇▆▄▂                │
   │                             │
   │                        ┌──┐ │
   │                        │✨│ │ ← AI Toggle
@@ -886,13 +894,6 @@ Break down results by:
 * **Negative Results:** If both variations decrease key metrics, revert to current implementation and investigate user feedback
 
 ---
-
-*Add your A/B tests below following the same format*
-
----
-
-
-# A/B Testing Documentation
 
 ## A/B Test Story: Button Placement in Guidance AI Page
 
