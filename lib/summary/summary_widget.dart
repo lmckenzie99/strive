@@ -469,6 +469,7 @@ class _SummaryWidgetState extends State<SummaryWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     FlutterFlowIconButton(
+                      key: ValueKey('IconButton_5yet'),
                       borderRadius: 8.0,
                       buttonSize: 40.0,
                       fillColor: FlutterFlowTheme.of(context).primary,
@@ -516,7 +517,6 @@ class _SummaryWidgetState extends State<SummaryWidget> {
               ),
             ),
             Container(
-              key: ValueKey('Container_8jy7'),
               width: 350.0,
               height: 300.0,
               decoration: BoxDecoration(
@@ -542,6 +542,7 @@ class _SummaryWidgetState extends State<SummaryWidget> {
                                 width: 290.1,
                                 height: 239.0,
                                 child: FlutterFlowLineChart(
+                                  key: ValueKey('Chart_w2xu'),
                                   data: [
                                     FFLineChartData(
                                       xData: FFAppState().chartLabels,
@@ -606,7 +607,6 @@ class _SummaryWidgetState extends State<SummaryWidget> {
                   padding:
                       EdgeInsetsDirectional.fromSTEB(16.0, 24.0, 10.0, 10.0),
                   child: Text(
-                    key: ValueKey('Text_0rus'),
                     getJsonField(
                       FFAppState().weeklySummaryStats,
                       r'''$.summaryText''',
@@ -669,7 +669,6 @@ class _SummaryWidgetState extends State<SummaryWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.asset(
-                        key: ValueKey('Image_02n0'),
                         'assets/images/AI-image.png',
                         width: 80.0,
                         height: 80.0,

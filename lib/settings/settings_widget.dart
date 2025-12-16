@@ -470,6 +470,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     FlutterFlowIconButton(
+                      key: ValueKey('IconButton_4oph'),
                       borderColor: Colors.transparent,
                       borderRadius: 8.0,
                       borderWidth: 1.0,
@@ -649,6 +650,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   builder: (context) => Container(
                                     width: 250.0,
                                     child: TextFormField(
+                                      key: ValueKey('Name_pdx6'),
                                       controller: _model.nameTextController,
                                       focusNode: _model.nameFocusNode,
                                       onFieldSubmitted: (_) async {

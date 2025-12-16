@@ -522,6 +522,7 @@ class _DetailsWidgetState extends State<DetailsWidget> {
                               ),
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FlutterFlowIconButton(
+                                key: ValueKey('IconButton_noge'),
                                 borderRadius: 8.0,
                                 buttonSize: 40.0,
                                 fillColor: FlutterFlowTheme.of(context).primary,
@@ -544,6 +545,7 @@ class _DetailsWidgetState extends State<DetailsWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 10.0, 50.0, 0.0, 0.0),
                             child: Text(
+                              key: ValueKey('Text_tt5q'),
                               'Detailed Analysis',
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
@@ -843,6 +845,8 @@ class _DetailsWidgetState extends State<DetailsWidget> {
                                                   padding: EdgeInsets.all(8.0),
                                                   child: FlutterFlowDropDown<
                                                       String>(
+                                                    key: ValueKey(
+                                                        'DropDown_g9s4'),
                                                     controller: _model
                                                             .dropDownValueController ??=
                                                         FormFieldController<
