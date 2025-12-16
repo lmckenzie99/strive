@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../cloud_functions/cloud_functions.dart';
+
 import 'package:flutter/foundation.dart';
 
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,36 +8,96 @@ import 'api_manager.dart';
 
 export 'api_manager.dart' show ApiCallResponse;
 
-const _kPrivateApiFunctionName = 'ffPrivateApiCall';
+const _kPrivateApiFunctionName = 'ffffsecretkeys';
 
 class GetAIResponseCall {
   static Future<ApiCallResponse> call({
     String? message = '',
   }) async {
-    final ffApiRequestBody = '''
-{
-  "prompt": "${escapeStringForJson(message)}"
-}''';
-    return ApiManager.instance.makeApiCall(
-      callName: 'getAIResponse',
-      apiUrl: 'https://aihelper-qwbkarwska-uc.a.run.app',
-      callType: ApiCallType.POST,
-      headers: {},
-      params: {},
-      body: ffApiRequestBody,
-      bodyType: BodyType.JSON,
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-      isStreamingApi: false,
-      alwaysAllowBody: false,
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'GetAIResponseCall',
+        'variables': {
+          'message': message,
+        },
+      },
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   static String? response(dynamic response) => castToType<String>(getJsonField(
         response,
         r'''$.response_text''',
+      ));
+}
+
+class PlaidExchangeTokenCall {
+  static Future<ApiCallResponse> call({
+    String? publicToken = '',
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'PlaidExchangeTokenCall',
+        'variables': {
+          'publicToken': publicToken,
+        },
+      },
+    );
+    return ApiCallResponse.fromCloudCallResponse(response);
+  }
+}
+
+class TempCall {
+  static Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'TempCall',
+        'variables': {},
+      },
+    );
+    return ApiCallResponse.fromCloudCallResponse(response);
+  }
+}
+
+class PlaidGetTransactionsCall {
+  static Future<ApiCallResponse> call({
+    String? accessToken = '',
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'PlaidGetTransactionsCall',
+        'variables': {
+          'accessToken': accessToken,
+        },
+      },
+    );
+    return ApiCallResponse.fromCloudCallResponse(response);
+  }
+}
+
+class PlaidCreateLinkTokenCall {
+  static Future<ApiCallResponse> call({
+    String? userId = '',
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'PlaidCreateLinkTokenCall',
+        'variables': {
+          'userId': userId,
+        },
+      },
+    );
+    return ApiCallResponse.fromCloudCallResponse(response);
+  }
+
+  static String? linkToken(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.link_token''',
       ));
 }
 

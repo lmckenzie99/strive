@@ -1,9 +1,12 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/components/passwordfield_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -755,6 +758,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                 'Button_byib'),
                                                             onPressed:
                                                                 () async {
+                                                              var _shouldSetState =
+                                                                  false;
                                                               GoRouter.of(
                                                                       context)
                                                                   .prepareAuthEvent();
@@ -775,7 +780,91 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                 return;
                                                               }
 
-                                                              if (loggedIn) {
+                                                              _model.plaidTransactions =
+                                                                  await PlaidGetTransactionsCall
+                                                                      .call(
+                                                                accessToken:
+                                                                    FFAppState()
+                                                                        .plaidAccessToken,
+                                                              );
+
+                                                              _shouldSetState =
+                                                                  true;
+                                                              if ((_model.plaidTransactions
+                                                                          ?.succeeded ??
+                                                                      true) &&
+                                                                  loggedIn) {
+                                                                FFAppState()
+                                                                        .rawTransactions =
+                                                                    getJsonField(
+                                                                  (_model.plaidTransactions
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                  r'''$.added''',
+                                                                  true,
+                                                                )!
+                                                                        .toList()
+                                                                        .cast<
+                                                                            dynamic>();
+                                                                safeSetState(
+                                                                    () {});
+                                                                _model.aggregatedData =
+                                                                    await actions
+                                                                        .aggregatePlaidTransactions(
+                                                                  FFAppState()
+                                                                      .rawTransactions
+                                                                      .toList(),
+                                                                );
+                                                                _shouldSetState =
+                                                                    true;
+                                                                FFAppState()
+                                                                        .aggregateCategories =
+                                                                    _model
+                                                                        .aggregatedData!
+                                                                        .toList()
+                                                                        .cast<
+                                                                            dynamic>();
+                                                                safeSetState(
+                                                                    () {});
+                                                                _model.monthlyData =
+                                                                    await actions
+                                                                        .getMonthlySpendingData(
+                                                                  FFAppState()
+                                                                      .rawTransactions
+                                                                      .toList(),
+                                                                  'day',
+                                                                );
+                                                                _shouldSetState =
+                                                                    true;
+                                                                FFAppState()
+                                                                        .chartAmounts =
+                                                                    (getJsonField(
+                                                                  _model
+                                                                      .monthlyData,
+                                                                  r'''$.amounts''',
+                                                                  true,
+                                                                ) as List?)!
+                                                                        .cast<
+                                                                            double>()
+                                                                        .toList()
+                                                                        .cast<
+                                                                            double>();
+                                                                FFAppState()
+                                                                        .chartLabels =
+                                                                    (getJsonField(
+                                                                  _model
+                                                                      .monthlyData,
+                                                                  r'''$.labels''',
+                                                                  true,
+                                                                ) as List?)!
+                                                                        .cast<
+                                                                            double>()
+                                                                        .toList()
+                                                                        .cast<
+                                                                            double>();
+                                                                safeSetState(
+                                                                    () {});
+
                                                                 await currentUserReference!
                                                                     .update({
                                                                   ...mapToFirestore(
@@ -804,11 +893,16 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                           .mounted);
                                                                 } else {
                                                                   context.goNamedAuth(
-                                                                      SummaryWidget
+                                                                      SplashscreenThrobberWidget
                                                                           .routeName,
                                                                       context
                                                                           .mounted);
                                                                 }
+
+                                                                if (_shouldSetState)
+                                                                  safeSetState(
+                                                                      () {});
+                                                                return;
                                                               } else {
                                                                 ScaffoldMessenger.of(
                                                                         context)
@@ -816,7 +910,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                   SnackBar(
                                                                     content:
                                                                         Text(
-                                                                      '\"Error logging in!\"',
+                                                                      '',
                                                                       style:
                                                                           TextStyle(
                                                                         color: FlutterFlowTheme.of(context)
@@ -831,7 +925,15 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                             .secondary,
                                                                   ),
                                                                 );
+                                                                if (_shouldSetState)
+                                                                  safeSetState(
+                                                                      () {});
+                                                                return;
                                                               }
+
+                                                              if (_shouldSetState)
+                                                                safeSetState(
+                                                                    () {});
                                                             },
                                                             text: 'Sign In',
                                                             options:
@@ -995,7 +1097,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                   }
 
                                                                   context.goNamedAuth(
-                                                                      SummaryWidget
+                                                                      LoginWidget
                                                                           .routeName,
                                                                       context
                                                                           .mounted);
@@ -1065,86 +1167,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                 ),
                                                               ),
                                                             ),
-                                                            isAndroid
-                                                                ? Container()
-                                                                : Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            16.0),
-                                                                    child:
-                                                                        FFButtonWidget(
-                                                                      onPressed:
-                                                                          () async {
-                                                                        GoRouter.of(context)
-                                                                            .prepareAuthEvent();
-                                                                        final user =
-                                                                            await authManager.signInWithApple(context);
-                                                                        if (user ==
-                                                                            null) {
-                                                                          return;
-                                                                        }
-
-                                                                        context.goNamedAuth(
-                                                                            SummaryWidget.routeName,
-                                                                            context.mounted);
-                                                                      },
-                                                                      text:
-                                                                          'Continue with Apple',
-                                                                      icon:
-                                                                          FaIcon(
-                                                                        FontAwesomeIcons
-                                                                            .apple,
-                                                                        size:
-                                                                            20.0,
-                                                                      ),
-                                                                      options:
-                                                                          FFButtonOptions(
-                                                                        width:
-                                                                            230.0,
-                                                                        height:
-                                                                            44.0,
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                        iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .primary,
-                                                                        textStyle: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .override(
-                                                                              font: GoogleFonts.inter(
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                              ),
-                                                                              letterSpacing: 0.0,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            ),
-                                                                        elevation:
-                                                                            0.0,
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primary,
-                                                                          width:
-                                                                              2.0,
-                                                                        ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(40.0),
-                                                                        hoverColor:
-                                                                            FlutterFlowTheme.of(context).primaryBackground,
-                                                                      ),
-                                                                    ),
-                                                                  ),
                                                           ],
                                                         ),
                                                       ),
@@ -1163,23 +1185,41 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              GoRouter.of(
-                                                                      context)
-                                                                  .prepareAuthEvent();
-                                                              final user =
-                                                                  await authManager
-                                                                      .signInWithGoogle(
-                                                                          context);
-                                                              if (user ==
-                                                                  null) {
-                                                                return;
-                                                              }
-
-                                                              context.goNamedAuth(
-                                                                  SummaryWidget
-                                                                      .routeName,
-                                                                  context
-                                                                      .mounted);
+                                                              await showModalBottomSheet(
+                                                                isScrollControlled:
+                                                                    true,
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                enableDrag:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return GestureDetector(
+                                                                    onTap: () {
+                                                                      FocusScope.of(
+                                                                              context)
+                                                                          .unfocus();
+                                                                      FocusManager
+                                                                          .instance
+                                                                          .primaryFocus
+                                                                          ?.unfocus();
+                                                                    },
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: MediaQuery
+                                                                          .viewInsetsOf(
+                                                                              context),
+                                                                      child:
+                                                                          PasswordfieldWidget(),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).then((value) =>
+                                                                  safeSetState(
+                                                                      () {}));
                                                             },
                                                             text:
                                                                 'Forgot Password?',

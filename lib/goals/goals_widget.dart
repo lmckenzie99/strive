@@ -1,34 +1,37 @@
-import '/flutter_flow/flutter_flow_drop_down.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/add_goal_widget.dart';
+import '/components/goal_widget.dart';
+import '/components/no_goals_yet_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'details_screen_model.dart';
-export 'details_screen_model.dart';
+import 'goals_model.dart';
+export 'goals_model.dart';
 
-class DetailsScreenWidget extends StatefulWidget {
-  const DetailsScreenWidget({super.key});
+class GoalsWidget extends StatefulWidget {
+  const GoalsWidget({super.key});
 
-  static String routeName = 'DetailsScreen';
-  static String routePath = '/detailsScreen';
+  static String routeName = 'goals';
+  static String routePath = '/goals';
 
   @override
-  State<DetailsScreenWidget> createState() => _DetailsScreenWidgetState();
+  State<GoalsWidget> createState() => _GoalsWidgetState();
 }
 
-class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
-  late DetailsScreenModel _model;
+class _GoalsWidgetState extends State<GoalsWidget> {
+  late GoalsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => DetailsScreenModel());
+    _model = createModel(context, () => GoalsModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -50,6 +53,36 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            await showModalBottomSheet(
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (context) {
+                return GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Padding(
+                    padding: MediaQuery.viewInsetsOf(context),
+                    child: AddGoalWidget(),
+                  ),
+                );
+              },
+            ).then((value) => safeSetState(() {}));
+
+            safeSetState(() {});
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add_rounded,
+            color: FlutterFlowTheme.of(context).info,
+            size: 24.0,
+          ),
+        ),
         drawer: Drawer(
           elevation: 16.0,
           child: Column(
@@ -94,7 +127,7 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
                                               'menu_click_details');
 
                                           context.pushNamed(
-                                              DetailsScreenWidget.routeName);
+                                              DetailsWidget.routeName);
                                         },
                                         text: 'Detailed View',
                                         options: FFButtonOptions(
@@ -265,7 +298,62 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        32.0, 64.0, 0.0, 0.0),
+                                        0.0, 0.0, 0.0, 16.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        logFirebaseEvent('menu_click_guidance');
+
+                                        context
+                                            .pushNamed(GoalsWidget.routeName);
+                                      },
+                                      text: 'Goals',
+                                      options: FFButtonOptions(
+                                        width: 230.0,
+                                        height: 52.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                        elevation: 3.0,
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        32.0, 45.0, 0.0, 0.0),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.asset(
@@ -294,9 +382,9 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  context.pushNamed(ProfileWidget.routeName);
+                                  context.pushNamed(SummaryWidget.routeName);
                                 },
-                                text: '   Profile   ',
+                                text: 'Summary',
                                 options: FFButtonOptions(
                                   height: 34.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -376,7 +464,7 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(width: 16.0)),
+                          ].divide(SizedBox(width: 14.0)),
                         ),
                       ),
                     ].divide(SizedBox(height: 104.0)),
@@ -386,252 +474,130 @@ class _DetailsScreenWidgetState extends State<DetailsScreenWidget> {
             ],
           ),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-              alignment: AlignmentDirectional(0.0, -1.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primary,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          key: ValueKey('IconButton_7ibc'),
-                          borderRadius: 8.0,
-                          buttonSize: 40.0,
-                          fillColor: FlutterFlowTheme.of(context).primary,
-                          icon: Icon(
-                            Icons.menu_open_rounded,
-                            color: FlutterFlowTheme.of(context).info,
-                            size: 24.0,
-                          ),
-                          onPressed: () async {
-                            scaffoldKey.currentState!.openDrawer();
-                            logFirebaseEvent('button_click_menu');
-                          },
-                        ),
+        body: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(24.0, 25.0, 0.0, 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    FlutterFlowIconButton(
+                      borderRadius: 8.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).primary,
+                      icon: Icon(
+                        Icons.menu_open_rounded,
+                        color: FlutterFlowTheme.of(context).info,
+                        size: 24.0,
                       ),
+                      onPressed: () async {
+                        scaffoldKey.currentState!.openDrawer();
+                        logFirebaseEvent('button_click_menu');
+                      },
                     ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'Detailed Analysis',
-                      textAlign: TextAlign.center,
-                      style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
-                                font: GoogleFonts.interTight(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .headlineMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .headlineMedium
-                                      .fontStyle,
-                                ),
-                                fontSize: 30.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .fontWeight,
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(60.0, 0.0, 0.0, 0.0),
+                      child: Text(
+                        'Goals',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
-                                    .headlineMedium
+                                    .bodyMedium
                                     .fontStyle,
                               ),
-                    ),
-                  ),
-                ].divide(SizedBox(width: 30.0)),
-              ),
-            ),
-            Container(
-              key: ValueKey('Container_opok'),
-              width: 290.0,
-              height: 290.0,
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondary,
-                shape: BoxShape.circle,
-              ),
-              child: Align(
-                alignment: AlignmentDirectional(0.0, 0.0),
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Pie Chart',
-                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyLarge
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyLarge
-                                .fontStyle,
-                          ),
-                          fontSize: 20.0,
-                          letterSpacing: 0.0,
-                          fontWeight:
-                              FlutterFlowTheme.of(context).bodyLarge.fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-            Align(
-              alignment: AlignmentDirectional(1.0, -1.0),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 24.0, 0.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
-                    'assets/images/AI-image.png',
-                    width: 80.0,
-                    height: 80.0,
-                    fit: BoxFit.cover,
-                    alignment: Alignment(0.0, 0.0),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: MediaQuery.sizeOf(context).height * 0.37,
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Purchase Summary',
-                      style: FlutterFlowTheme.of(context).bodyLarge.override(
-                            font: GoogleFonts.inter(
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .fontWeight,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              fontSize: 30.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyLarge
+                                  .bodyMedium
                                   .fontStyle,
                             ),
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            fontSize: 16.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyLarge
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyLarge
-                                .fontStyle,
-                          ),
+                      ),
                     ),
-                  ),
-                  FlutterFlowDropDown<String>(
-                    controller: _model.dropDownValueController1 ??=
-                        FormFieldController<String>(null),
-                    options: ['1 Month', '3 Months', '6 Months'],
-                    onChanged: (val) =>
-                        safeSetState(() => _model.dropDownValue1 = val),
-                    width: 100.0,
-                    height: 40.0,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                          fontSize: 12.0,
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
-                    hintText: 'Duration',
-                    icon: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      size: 24.0,
-                    ),
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                    elevation: 2.0,
-                    borderColor: Colors.transparent,
-                    borderWidth: 0.0,
-                    borderRadius: 8.0,
-                    margin:
-                        EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                    hidesUnderline: true,
-                    isOverButton: false,
-                    isSearchable: false,
-                    isMultiSelect: false,
-                  ),
-                  FlutterFlowDropDown<String>(
-                    controller: _model.dropDownValueController2 ??=
-                        FormFieldController<String>(null),
-                    options: ['Option 1', 'Option 2', 'Option 3'],
-                    onChanged: (val) =>
-                        safeSetState(() => _model.dropDownValue2 = val),
-                    width: 100.0,
-                    height: 40.0,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                          fontSize: 12.0,
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
-                    hintText: 'FIlter',
-                    icon: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      size: 24.0,
-                    ),
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                    elevation: 2.0,
-                    borderColor: Colors.transparent,
-                    borderWidth: 0.0,
-                    borderRadius: 8.0,
-                    margin:
-                        EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                    hidesUnderline: true,
-                    isOverButton: false,
-                    isSearchable: false,
-                    isMultiSelect: false,
-                  ),
-                ],
+                  ].divide(SizedBox(width: 35.0)),
+                ),
               ),
-            ),
-          ].divide(SizedBox(height: 35.0)),
+              Expanded(
+                child: StreamBuilder<List<GoalsRecord>>(
+                  stream: queryGoalsRecord(
+                    queryBuilder: (goalsRecord) => goalsRecord
+                        .where(
+                          'user',
+                          isEqualTo: currentUserReference,
+                        )
+                        .where(
+                          'completed',
+                          isEqualTo: false,
+                        ),
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    List<GoalsRecord> listViewGoalsRecordList = snapshot.data!;
+                    if (listViewGoalsRecordList.isEmpty) {
+                      return NoGoalsYetWidget();
+                    }
+
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      itemCount: listViewGoalsRecordList.length,
+                      itemBuilder: (context, listViewIndex) {
+                        final listViewGoalsRecord =
+                            listViewGoalsRecordList[listViewIndex];
+                        return InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(
+                              GoalDetailsWidget.routeName,
+                              queryParameters: {
+                                'taskDoc': serializeParam(
+                                  listViewGoalsRecord,
+                                  ParamType.Document,
+                                ),
+                              }.withoutNulls,
+                              extra: <String, dynamic>{
+                                'taskDoc': listViewGoalsRecord,
+                              },
+                            );
+                          },
+                          child: GoalWidget(
+                            key: Key(
+                                'Keyyxh_${listViewIndex}_of_${listViewGoalsRecordList.length}'),
+                            goalsDocument: listViewGoalsRecord,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ].divide(SizedBox(height: 24.0)),
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/components/a_i_button_component_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,6 +9,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'guidance_a_i_model.dart';
 export 'guidance_a_i_model.dart';
 
@@ -32,9 +33,6 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
     super.initState();
     _model = createModel(context, () => GuidanceAIModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
-
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -47,6 +45,8 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -99,7 +99,7 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                                               'menu_click_details');
 
                                           context.pushNamed(
-                                              DetailsScreenWidget.routeName);
+                                              DetailsWidget.routeName);
                                         },
                                         text: 'Detailed View',
                                         options: FFButtonOptions(
@@ -268,6 +268,55 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                                       ),
                                     ),
                                   ),
+                                  FFButtonWidget(
+                                    onPressed: () async {
+                                      logFirebaseEvent('menu_click_goals');
+
+                                      context.pushNamed(GoalsWidget.routeName);
+                                    },
+                                    text: 'Goals',
+                                    options: FFButtonOptions(
+                                      width: 230.0,
+                                      height: 52.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 0.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            font: GoogleFonts.interTight(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                            color: Colors.white,
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                      elevation: 3.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.black,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         32.0, 64.0, 0.0, 0.0),
@@ -299,9 +348,9 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  context.pushNamed(ProfileWidget.routeName);
+                                  context.pushNamed(SummaryWidget.routeName);
                                 },
-                                text: '   Profile   ',
+                                text: 'Summary',
                                 options: FFButtonOptions(
                                   height: 34.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -381,7 +430,9 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(width: 16.0)),
+                          ]
+                              .divide(SizedBox(width: 14.0))
+                              .addToStart(SizedBox(width: 2.0)),
                         ),
                       ),
                     ].divide(SizedBox(height: 104.0)),
@@ -406,6 +457,7 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         FlutterFlowIconButton(
                           borderRadius: 8.0,
@@ -623,12 +675,7 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                                         padding: EdgeInsets.all(8.0),
                                         child: Text(
                                           valueOrDefault<String>(
-                                            getJsonField(
-                                              (_model.responseFromAI
-                                                      ?.jsonBody ??
-                                                  ''),
-                                              r'''$.response_text''',
-                                            )?.toString(),
+                                            FFAppState().responseFromGemini,
                                             'Hi there! I\'m ready to help you with any questions or tasks you have. Just type your prompt below and I\'ll generate a response for you.',
                                           ),
                                           style: FlutterFlowTheme.of(context)
@@ -672,178 +719,12 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                       ),
                     ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Questions?',
-                        style:
-                            FlutterFlowTheme.of(context).titleMedium.override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .fontStyle,
-                                ),
-                      ),
-                      TextFormField(
-                        controller: _model.textController,
-                        focusNode: _model.textFieldFocusNode,
-                        autofocus: false,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Type your message or question here...',
-                          hintStyle: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                ),
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFDAE5E1),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).primary,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFDAE5E1),
-                          contentPadding: EdgeInsets.all(16.0),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                        maxLines: 4,
-                        minLines: 3,
-                        keyboardType: TextInputType.multiline,
-                        cursorColor: FlutterFlowTheme.of(context).primary,
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
-                      ),
-                      FFButtonWidget(
-                        onPressed: () async {
-                          _model.responseFromAI = await GetAIResponseCall.call(
-                            message: _model.textController.text,
-                          );
-
-                          if ((_model.responseFromAI?.succeeded ?? true)) {
-                            FFAppState().responseFromGemini = getJsonField(
-                              (_model.responseFromAI?.jsonBody ?? ''),
-                              r'''$.response_text''',
-                            ).toString();
-                            safeSetState(() {});
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  '',
-                                  style: TextStyle(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                  ),
-                                ),
-                                duration: Duration(milliseconds: 4000),
-                                backgroundColor:
-                                    FlutterFlowTheme.of(context).secondary,
-                              ),
-                            );
-                          }
-
-                          safeSetState(() {});
-                        },
-                        text: 'Ask',
-                        icon: Icon(
-                          Icons.send_rounded,
-                          size: 20.0,
-                        ),
-                        options: FFButtonOptions(
-                          width: double.infinity,
-                          height: 50.0,
-                          padding: EdgeInsets.all(8.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 8.0, 0.0),
-                          iconColor: Colors.white,
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleMedium.override(
-                                    font: GoogleFonts.interTight(
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                          elevation: 2.0,
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                    ].divide(SizedBox(height: 16.0)),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.aIButtonComponentModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: AIButtonComponentWidget(),
+                    ),
                   ),
                 ]
                     .divide(SizedBox(height: 24.0))

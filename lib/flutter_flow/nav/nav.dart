@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -77,14 +78,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier, [Widget? entryPage]) =>
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? entryPage ?? SummaryWidget()
+          ? entryPage ?? LoginWidget()
           : CreateAccountWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? entryPage ?? SummaryWidget()
+              ? entryPage ?? LoginWidget()
               : CreateAccountWidget(),
         ),
         FFRoute(
@@ -93,9 +94,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier, [Widget? entryPage]) =>
           builder: (context, params) => NPSScreenWidget(),
         ),
         FFRoute(
-          name: ProfileWidget.routeName,
-          path: ProfileWidget.routePath,
-          builder: (context, params) => ProfileWidget(),
+          name: CreateAccountWidget.routeName,
+          path: CreateAccountWidget.routePath,
+          builder: (context, params) => CreateAccountWidget(),
         ),
         FFRoute(
           name: LoginWidget.routeName,
@@ -103,24 +104,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier, [Widget? entryPage]) =>
           builder: (context, params) => LoginWidget(),
         ),
         FFRoute(
-          name: CreateAccountWidget.routeName,
-          path: CreateAccountWidget.routePath,
-          builder: (context, params) => CreateAccountWidget(),
-        ),
-        FFRoute(
-          name: SummaryWidget.routeName,
-          path: SummaryWidget.routePath,
-          builder: (context, params) => SummaryWidget(),
-        ),
-        FFRoute(
-          name: TrendAnalysisWidget.routeName,
-          path: TrendAnalysisWidget.routePath,
-          builder: (context, params) => TrendAnalysisWidget(),
-        ),
-        FFRoute(
-          name: DetailsScreenWidget.routeName,
-          path: DetailsScreenWidget.routePath,
-          builder: (context, params) => DetailsScreenWidget(),
+          name: SplashscreenThrobberWidget.routeName,
+          path: SplashscreenThrobberWidget.routePath,
+          builder: (context, params) => SplashscreenThrobberWidget(),
         ),
         FFRoute(
           name: SettingsWidget.routeName,
@@ -131,6 +117,45 @@ GoRouter createRouter(AppStateNotifier appStateNotifier, [Widget? entryPage]) =>
           name: GuidanceAIWidget.routeName,
           path: GuidanceAIWidget.routePath,
           builder: (context, params) => GuidanceAIWidget(),
+        ),
+        FFRoute(
+          name: GoalDetailsWidget.routeName,
+          path: GoalDetailsWidget.routePath,
+          asyncParams: {
+            'taskDoc': getDoc(['goals'], GoalsRecord.fromSnapshot),
+          },
+          builder: (context, params) => GoalDetailsWidget(
+            taskDoc: params.getParam(
+              'taskDoc',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: GoalsWidget.routeName,
+          path: GoalsWidget.routePath,
+          builder: (context, params) => GoalsWidget(),
+        ),
+        FFRoute(
+          name: SummaryWidget.routeName,
+          path: SummaryWidget.routePath,
+          builder: (context, params) => SummaryWidget(),
+        ),
+        FFRoute(
+          name: DetailsWidget.routeName,
+          path: DetailsWidget.routePath,
+          builder: (context, params) => DetailsWidget(
+            transactions: params.getParam<dynamic>(
+              'transactions',
+              ParamType.JSON,
+              isList: true,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: TrendAnalysisWidget.routeName,
+          path: TrendAnalysisWidget.routePath,
+          builder: (context, params) => TrendAnalysisWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

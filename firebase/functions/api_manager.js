@@ -1,13 +1,179 @@
 const axios = require("axios").default;
 const qs = require("qs");
 
+async function _getAIResponseCall(context, ffVariables) {
+  if (!context.auth) {
+    return _unauthenticatedResponse;
+  }
+  var message = ffVariables["message"];
+
+  var url = `https://aihelper-qwbkarwska-uc.a.run.app`;
+  var headers = {};
+  var params = {};
+  var ffApiRequestBody = `
+{
+  "prompt": "${escapeStringForJson(message)}"
+}`;
+
+  return makeApiRequest({
+    method: "post",
+    url,
+    headers,
+    params,
+    body: createBody({
+      headers,
+      params,
+      body: ffApiRequestBody,
+      bodyType: "JSON",
+    }),
+    returnBody: true,
+    isStreamingApi: false,
+  });
+}
+async function _plaidExchangeTokenCall(context, ffVariables) {
+  if (!context.auth) {
+    return _unauthenticatedResponse;
+  }
+  var publicToken = ffVariables["publicToken"];
+
+  var url = `https://sandbox.plaid.com/item/public_token/exchange`;
+  var headers = { Key: `Content-Type Value: application/json` };
+  var params = {};
+  var ffApiRequestBody = `
+{
+  "client_id": "68f657d97c634d00204cc9ef",
+  "secret": "8d46e5bf10e07514de59348254e316",
+  "public_token": "${escapeStringForJson(publicToken)}"
+}`;
+
+  return makeApiRequest({
+    method: "post",
+    url,
+    headers,
+    params,
+    body: createBody({
+      headers,
+      params,
+      body: ffApiRequestBody,
+      bodyType: "JSON",
+    }),
+    returnBody: true,
+    isStreamingApi: false,
+  });
+}
+async function _tempCall(context, ffVariables) {
+  var url = `https://sandbox.plaid.com/sandbox/public_token/create`;
+  var headers = {};
+  var params = {};
+  var ffApiRequestBody = `
+{
+  "client_id": "68f657d97c634d00204cc9ef",
+  "secret": "8d46e5bf10e07514de59348254e316",
+  "institution_id": "ins_109508",
+  "initial_products": ["transactions"]
+}`;
+
+  return makeApiRequest({
+    method: "post",
+    url,
+    headers,
+    params,
+    body: createBody({
+      headers,
+      params,
+      body: ffApiRequestBody,
+      bodyType: "JSON",
+    }),
+    returnBody: true,
+    isStreamingApi: false,
+  });
+}
+async function _plaidGetTransactionsCall(context, ffVariables) {
+  if (!context.auth) {
+    return _unauthenticatedResponse;
+  }
+  var accessToken = ffVariables["accessToken"];
+
+  var url = `https://sandbox.plaid.com/transactions/sync`;
+  var headers = { Key: `Content-Type Value: application/json` };
+  var params = {};
+  var ffApiRequestBody = `
+{
+  "client_id": "68f657d97c634d00204cc9ef",
+  "secret": "8d46e5bf10e07514de59348254e316",
+  "access_token": "${escapeStringForJson(accessToken)}"
+}`;
+
+  return makeApiRequest({
+    method: "post",
+    url,
+    headers,
+    params,
+    body: createBody({
+      headers,
+      params,
+      body: ffApiRequestBody,
+      bodyType: "JSON",
+    }),
+    returnBody: true,
+    isStreamingApi: false,
+  });
+}
+async function _plaidCreateLinkTokenCall(context, ffVariables) {
+  if (!context.auth) {
+    return _unauthenticatedResponse;
+  }
+  var userId = ffVariables["userId"];
+
+  var url = `https://sandbox.plaid.com/link/token/create`;
+  var headers = { Key: `Content-Type Value: application/json` };
+  var params = {};
+  var ffApiRequestBody = `
+{
+  "client_id": "68f657d97c634d00204cc9ef",
+  "secret": "8d46e5bf10e07514de59348254e316",
+  "user": {
+    "client_user_id": "user_good"
+  },
+  "client_name": "Strive",
+  "products": [
+    "transactions"
+  ],
+  "country_codes": [
+    "US"
+  ],
+  "language": "en"
+}`;
+
+  return makeApiRequest({
+    method: "post",
+    url,
+    headers,
+    params,
+    body: createBody({
+      headers,
+      params,
+      body: ffApiRequestBody,
+      bodyType: "JSON",
+    }),
+    returnBody: true,
+    isStreamingApi: false,
+  });
+}
+
 /// Helper functions to route to the appropriate API Call.
 
 async function makeApiCall(context, data) {
   var callName = data["callName"] || "";
   var variables = data["variables"] || {};
 
-  const callMap = {};
+  const callMap = {
+    GetAIResponseCall: _getAIResponseCall,
+    PlaidExchangeTokenCall: _plaidExchangeTokenCall,
+    TempCall: _tempCall,
+    PlaidGetTransactionsCall: _plaidGetTransactionsCall,
+    PlaidCreateLinkTokenCall: _plaidCreateLinkTokenCall,
+  };
 
   if (!(callName in callMap)) {
     return {

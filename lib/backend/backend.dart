@@ -8,6 +8,7 @@ import 'schema/util/firestore_util.dart';
 import 'schema/users_record.dart';
 import 'schema/nps_metrics_record.dart';
 import 'schema/greetings_for_a_i_prompt_record.dart';
+import 'schema/goals_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -19,6 +20,7 @@ export 'schema/util/schema_util.dart';
 export 'schema/users_record.dart';
 export 'schema/nps_metrics_record.dart';
 export 'schema/greetings_for_a_i_prompt_record.dart';
+export 'schema/goals_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -126,6 +128,43 @@ Future<List<GreetingsForAIPromptRecord>> queryGreetingsForAIPromptRecordOnce({
     queryCollectionOnce(
       GreetingsForAIPromptRecord.collection,
       GreetingsForAIPromptRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query GoalsRecords (as a Stream and as a Future).
+Future<int> queryGoalsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      GoalsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<GoalsRecord>> queryGoalsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      GoalsRecord.collection,
+      GoalsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<GoalsRecord>> queryGoalsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      GoalsRecord.collection,
+      GoalsRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

@@ -74,30 +74,30 @@ void main() async {
     ));
     await GoogleFonts.pendingFonts();
 
-    await tester.tap(find.byKey(const ValueKey('TextField_um2w')));
-    await tester.tap(find.byKey(const ValueKey('DropDown_yg75')));
-    await tester.tap(find.byKey(const ValueKey('Name_zf10')));
-    await tester.tap(find.byKey(const ValueKey('Button_ugeg')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(
       const Duration(milliseconds: 3),
       EnginePhase.sendSemanticsUpdate,
       const Duration(milliseconds: 12),
     );
-    await tester.tap(find.byKey(const ValueKey('Button_d6vb')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(
       const Duration(milliseconds: 5),
       EnginePhase.sendSemanticsUpdate,
       const Duration(milliseconds: 15),
     );
     expect(find.byKey(const ValueKey('Settings_v2lp')), findsWidgets);
-    await tester.tap(find.byKey(const ValueKey('Button_iqci')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(
       const Duration(milliseconds: 5),
       EnginePhase.sendSemanticsUpdate,
       const Duration(milliseconds: 15),
     );
     expect(find.byKey(const ValueKey('Column_3fpv')), findsWidgets);
-    await tester.tap(find.byKey(const ValueKey('Button_la0c')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(
       const Duration(milliseconds: 5),
       EnginePhase.sendSemanticsUpdate,
@@ -124,12 +124,12 @@ void main() async {
     await tester.tap(find.byKey(const ValueKey('Button_byib')));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     expect(find.byKey(const ValueKey('Container_8jy7')), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('IconButton_7rn0')));
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     await tester.tap(find.text('Detailed View'));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
-    expect(find.byKey(const ValueKey('Container_opok')), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('IconButton_7ibc')));
+    expect(find.byKey(const ValueKey('UNDEFINED')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('UNDEFINED')));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     await tester.tap(find.text('Trend Analysis'));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
@@ -165,7 +165,7 @@ void main() async {
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     // Note this will eventually be a graph, for now we look for 'Graph' placeholder
     await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('Text_zhv8')),
+      find.byKey(const ValueKey('UNDEFINED')),
       100.0,
       scrollable: find
           .descendant(
@@ -191,7 +191,7 @@ void main() async {
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     // likely will fail since prereq of this test is to be signed in to an account
     await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('Text_zhv8')),
+      find.byKey(const ValueKey('UNDEFINED')),
       100.0,
       scrollable: find
           .descendant(
@@ -202,7 +202,7 @@ void main() async {
     );
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('Text_zhv8')),
+      find.byKey(const ValueKey('UNDEFINED')),
       100.0,
       scrollable: find
           .descendant(

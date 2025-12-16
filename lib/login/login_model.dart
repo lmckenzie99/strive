@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'login_widget.dart' show LoginWidget;
@@ -22,6 +23,12 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // Stores action output result for [Backend Call - API (plaid get transactions)] action in Button widget.
+  ApiCallResponse? plaidTransactions;
+  // Stores action output result for [Custom Action - aggregatePlaidTransactions] action in Button widget.
+  List<dynamic>? aggregatedData;
+  // Stores action output result for [Custom Action - getMonthlySpendingData] action in Button widget.
+  dynamic monthlyData;
 
   @override
   void initState(BuildContext context) {
