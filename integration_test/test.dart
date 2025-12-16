@@ -33,7 +33,6 @@ void main() async {
 
   testWidgets('US1 Account Creation', (WidgetTester tester) async {
     _overrideOnError();
-
     await tester.pumpWidget(ChangeNotifierProvider(
       create: (context) => FFAppState(),
       child: MyApp(
@@ -47,7 +46,7 @@ void main() async {
     await tester.pumpAndSettle(const Duration(milliseconds: 10000));
     await tester.enterText(
         find.byKey(const ValueKey('emailAddress_Create_eqmw')),
-        'test100@test.com');
+        'test${DateTime.now().millisecondsSinceEpoch}@test.com');
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pumpAndSettle(const Duration(milliseconds: 10000));
     await tester.tap(find.byKey(const ValueKey('password_Create_ajqt')));
@@ -69,15 +68,32 @@ void main() async {
 
   testWidgets('US3ProfileCreation', (WidgetTester tester) async {
     _overrideOnError();
+
+    await initFirebase(); // Make sure Firebase is initialized
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: 'test@test.com', password: 'test123');
     await tester.pumpWidget(ChangeNotifierProvider(
       create: (context) => FFAppState(),
-      child: const MyApp(),
+      child: MyApp(
+        entryPage: SettingsWidget(),
+      ),
     ));
     await GoogleFonts.pendingFonts();
+    await tester.pumpAndSettle(const Duration(milliseconds: 7000));
+    print('\n=== AFTER LOGIN ===');
+    find.byType(Text).evaluate().forEach((element) {
+      final widget = element.widget as Text;
+      if (widget.data != null && widget.data!.isNotEmpty) {
+        print('  "${widget.data}"');
+      }
+    });
+    print('========================\n');
 
-    await tester.enterText(find.byKey(const ValueKey('Name_pdx6')), 'John');
+    final nameField = find.byKey(const ValueKey('Name_pdx6'));
+    expect(nameField, findsOneWidget);
+    await tester.tap(nameField); // Focus the field first
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
+    await tester.enterText(nameField, 'John');
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pumpAndSettle(const Duration(milliseconds: 2000));
     await tester.tap(find.byKey(const ValueKey('IconButton_4oph')));
@@ -138,7 +154,7 @@ void main() async {
     await tester.tap(find.byKey(const ValueKey('AIButtonComponent_ee9m')));
   });
 
-  testWidgets('US5 Splashscreen Unit Test', (WidgetTester tester) async {
+testWidgets('US5 Splashscreen Unit Test', (WidgetTester tester) async {
     _overrideOnError();
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: 'test@test.com', password: 'test123');
@@ -148,14 +164,15 @@ void main() async {
     ));
     await GoogleFonts.pendingFonts();
 
-    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
-    await tester.tap(find.byKey(const ValueKey('Text_btct')));
-    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
-    // Note this will eventually be a graph, for now we look for 'Graph' placeholder
+    await tester.pumpAndSettle(const Duration(milliseconds: 10000));
+    
+    // Verify we landed on the Summary page after splash
+    expect(find.text('Summary'), findsOneWidget);
+    
+    // Test the chart widget that actually exists
     await tester.tap(find.byKey(const ValueKey('Chart_w2xu')));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
   });
-
   testWidgets('US 2 User Login', (WidgetTester tester) async {
     _overrideOnError();
 
@@ -167,11 +184,11 @@ void main() async {
     ));
     await GoogleFonts.pendingFonts();
 
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(const ValueKey('emailAddress_1rls')),
-        'christiancdcurrie@uri.edu');
+    await tester.pumpAndSettle(const Duration(milliseconds: 10000));
     await tester.enterText(
-        find.byKey(const ValueKey('password_i5zf')), 'Darkus@94295286');
+        find.byKey(const ValueKey('emailAddress_1rls')), 'test@test.com');
+    await tester.enterText(
+        find.byKey(const ValueKey('password_i5zf')), 'test123');
     await tester.tap(find.byKey(const ValueKey('Button_byib')));
     await tester.pumpAndSettle(const Duration(milliseconds: 3000));
     expect(find.byKey(const ValueKey('Column_3fpv')), findsWidgets);
