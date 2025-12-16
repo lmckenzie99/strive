@@ -608,7 +608,6 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                   Padding(
                     padding: EdgeInsets.all(24.0),
                     child: Container(
-                      key: ValueKey('Container_tevx'),
                       width: double.infinity,
                       height: 200.0,
                       decoration: BoxDecoration(
@@ -723,7 +722,9 @@ class _GuidanceAIWidgetState extends State<GuidanceAIWidget> {
                     child: wrapWithModel(
                       model: _model.aIButtonComponentModel,
                       updateCallback: () => safeSetState(() {}),
-                      child: AIButtonComponentWidget(),
+                      child: AIButtonComponentWidget(
+                        key: ValueKey('AIButtonComponent_ee9m'),
+                      ),
                     ),
                   ),
                 ]

@@ -522,7 +522,6 @@ class _TrendAnalysisWidgetState extends State<TrendAnalysisWidget> {
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Container(
-                          key: ValueKey('Container_c7hu'),
                           width: 160.0,
                           height: 230.0,
                           decoration: BoxDecoration(
@@ -1105,6 +1104,7 @@ class _TrendAnalysisWidgetState extends State<TrendAnalysisWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                       child: FFButtonWidget(
+                        key: ValueKey('Button_l5bo'),
                         onPressed: () async {
                           _model.geminiInsights =
                               await actions.analyzeTransactionsWithGemini(
