@@ -1,0 +1,3 @@
+Stop guessing. Start knowing.  
+$trive links your daily habits to your spending—so you can see the real $ impact of your routines.  
+Expense tracking meets habit tracking.
